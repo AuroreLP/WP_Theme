@@ -1,0 +1,176 @@
+/* ============================================
+   ARCHIVES DE TAXONOMIES - Chroniques
+   ============================================ */
+
+.chroniques-archive {
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 40px 20px;
+    overflow-x: hidden;
+}
+
+.chroniques-archive .post-box {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* En-tête de l'archive */
+.archive-header {
+    text-align: center;
+    margin-bottom: 50px;
+    padding-bottom: 30px;
+    font-size: clamp(2.5rem, 3vw, 3.3rem);
+}
+
+/* Grille des chroniques */
+.chroniques-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+    margin-bottom: 50px;
+    width: 100%;
+}
+
+/* Carte individuelle */
+.chronique-card {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Lien sur toute la carte */
+.chronique-card > a {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.chronique-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.chronique-card:hover h2 {
+    color: var(--light-green);
+}
+
+/* Image de la chronique */
+.chronique-thumbnail {
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.chronique-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    display: block;
+}
+
+.chronique-card:hover .chronique-thumbnail img {
+    transform: scale(1.05);
+}
+
+/* Informations de la chronique */
+.chronique-info {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.article-title a {
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+
+.article-date {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    display: block;
+    margin-bottom: 15px;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 40px;
+    padding: 20px;
+    font-family: 'Montserrat', sans-serif;
+    clear: both;
+}
+
+.pagination a,
+.pagination span {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #2c3e50;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.pagination a:hover {
+    background: #2c3e50;
+    color: #fff;
+    border-color: #2c3e50;
+}
+
+.pagination .current {
+    background: #2c3e50;
+    color: #fff;
+    border-color: #2c3e50;
+}
+
+/* Message si aucune chronique */
+.chroniques-grid > p {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+    color: #7f8c8d;
+    padding: 40px 20px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    
+    .chronique-thumbnail {
+        height: 300px;
+    }
+
+}
+
+@media (max-width: 480px) {
+    .chroniques-archive {
+        padding: 20px 15px;
+    }
+    
+    .chroniques-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .chronique-thumbnail {
+        height: 300px;
+    }
+}

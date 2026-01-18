@@ -1,0 +1,19 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env / secrets
+.env
+.env.local
+
+# Cache / build (si un jour tu ajoutes un bundler)
+dist/
+build/
+
+# Logs
+*.log

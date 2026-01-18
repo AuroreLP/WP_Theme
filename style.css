@@ -1,0 +1,395 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+/*
+Theme Name: Pensées Livresques - Blog
+Theme URI: https://127.0.0.1/turning-pages
+Author: Aurore LP
+Author URI: https://aurorelp.github.io
+Description: Thème pour blog littéraire
+Version: 1.0
+*/
+
+/* ####################### */
+/* Global */
+/* ####################### */
+
+*, ::before, ::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+    color: #2b4743;
+    text-decoration: none;
+    list-style: none;
+}
+
+
+html, body {
+    scroll-behavior: auto !important;
+    scroll-padding-top: 0 !important;
+}
+
+:root{
+    --light: #f7f2e6;
+    --dark-text: rgb(43, 71, 67);
+    --light-green: #38d6c2;
+    --wine: #811956;
+    --dark: #202c39;
+}
+
+body {
+    background-color: var(--light);
+    color: var(--dark-text);
+}
+
+.blog {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    flex-wrap: wrap;
+}
+
+.content {
+    width: 100%;
+    flex: 1 1 auto;
+    padding: 1.5rem;
+}
+
+
+h1 {
+    font-size: clamp(2.5rem, 3vw, 3.3rem);
+    line-height: 1.5;
+    margin-top: 1rem;
+}
+
+h2 {
+    font-size: clamp(2rem, 2vw, 2.5rem);
+    line-height: 1;
+    margin: 0 0 5px 0;
+}
+
+h3 {
+    font-size: clamp(1.8rem, 1.5vw, 2.2rem);
+    line-height: 1;
+    font-family: "Cardo", serif;
+    margin: 0 0 5px 0;
+}
+
+p {
+    font-size: clamp(1rem, 1vw, 1.4rem);
+    line-height: 1.4rem;
+    text-align: justify;
+}
+
+hr {
+    border: none;
+    border-top: 2px solid #ccc;
+    margin: 1rem auto;
+    width: 60%;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    cursor: pointer;
+    color: var(--wine);
+}
+
+
+@media (max-width: 768px) {
+
+    .content {
+        flex: 1;
+        min-width: 0;
+        padding-top: 4rem;
+    }
+}
+
+/* ####################### */
+/* Hero */
+/* ####################### */
+.hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 4rem 0 3rem 0;
+}
+
+.hero .logo {
+    display: block;
+    width: 300px;
+    max-width: 50%;
+    margin-bottom: 0.5rem;
+}
+
+.hero .logo img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.home-subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    font-style: italic;
+    color: var(--dark-text);
+    margin-bottom: 2rem;
+}
+
+
+/* ####################### */
+/* About */
+/* ####################### */
+
+.columns {
+    max-width: 90%;
+    margin: 0 auto;
+    column-count: 3;
+    column-gap: 3em;
+    column-rule: 1px solid #ccc;
+    margin-top: 3rem;
+
+}
+
+/* TITRES protégés */
+.columns h2 {
+    break-inside: avoid;
+    margin-bottom: 1rem;
+}
+
+/* PARAGRAPHES autorisés à passer en plusieurs colonnes */
+.columns p {
+    break-inside: auto;
+    margin-bottom: 1rem;
+}
+
+.columns img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+}
+
+@media (max-width: 1000px) {
+
+    .columns {
+        column-count: 2;
+    }
+}
+
+@media (max-width: 700px) {
+
+    .columns {
+        column-count: 1;
+    }
+}
+
+/* ####################### */
+/* Contact */
+/* ####################### */
+
+.container-content.contact {
+    max-width: 600px;
+    margin: 0 auto; /* Pour centrer */
+}
+
+.container-content form {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 3rem;
+}
+
+.container-content form label {
+    margin-bottom: 0.5rem;
+}
+
+.container-content .form-input, .container-content .form-textarea {
+    width: 100%;
+    height: 40px;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--dark-text);
+}
+
+.container-content .form-textarea {
+    height: 150px;
+    resize: none;
+    margin-bottom: 1rem;
+}
+
+.container-content .form-input:focus, .container-content .form-textarea:focus {
+    border-color: var(--light-green);
+}
+
+/* ####################### */
+/* Footer */
+/* ####################### */
+footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 2rem;
+    width: 100%; /* Force le footer à prendre toute la largeur */
+    flex-shrink: 0; /* Empêche le footer de rétrécir */
+    border-top: 1px solid #ccc;
+    margin-top: 2rem;
+    box-shadow: #ccc;
+}
+
+footer p {
+    font-size: 0.9rem;
+}
+
+footer .legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+}
+
+
+footer .legal a:hover {
+    background-color: var(--light-green);
+    color: var(--dark-text);
+    font-weight: 600;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+footer .social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 1.2rem;
+}
+
+footer .social a {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+footer .social a:hover {
+    background-color: var(--light-green);
+}
+
+@media (max-width: 800px) {
+    footer {
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    footer .legal {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+
+/* ####################### */
+/* Tablet version */
+/* ####################### */
+
+@media (max-width: 1024px) {
+    .logo {
+        margin: auto;
+    }
+
+    .img {
+        max-width: 25rem;
+    }
+
+}
+
+/* ####################### */
+/* Mobile version */
+/* ####################### */
+
+@media (max-width: 768px) {
+
+    .logo {
+        max-width: 0.8rem;
+    }
+
+    .content {
+        padding-top: 4rem;
+    }
+
+}
+
+/* ####################### */
+/* Mobile version - under 500px */
+/* ####################### */
+
+@media (max-width: 500px) {
+
+    .container {
+        max-width: 90%;
+
+    }
+}
+
+
+
+/* ####################### */
+/* Pages légales - page.php */
+/* ####################### */
+.container-legal {
+    width: 1200px;
+    max-width: 70%;
+    margin: 0 auto;
+    padding: 2rem 1rem; 
+}
+
+.page-header h1 {
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    font-weight: 700;
+    color: var(--dark-text);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.page-text h2 {
+    font-size: clamp(1.8rem, 2vw, 2.2rem);
+    font-weight: 600;
+    color: var(--dark-text);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--light-green);
+    padding-bottom: 0.4rem;
+}
+
+.page-text h3 {
+    font-size: clamp(1.6rem, 1.8vw, 2rem);
+    font-weight: 600;
+    color: var(--dark-text);
+    margin-top: 2rem;
+    margin-bottom: 0.7rem;
+}
+.container-legal li {
+    list-style-type: circle;
+    margin: 0.5rem 0 0.5rem 1.5rem;
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+    .container-legal {
+        max-width: 95%; /* Plus large sur mobile */
+        padding: 1rem 0.5rem;
+    }
+}

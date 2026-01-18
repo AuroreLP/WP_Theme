@@ -1,0 +1,184 @@
+/* ==========================================
+   SINGLES - Base commune pour tous les types
+   ========================================== */
+
+/* ####################### */
+/* Base Structure - Commune à tous les singles */
+/* ####################### */
+.single-chronique {
+    max-width: 80%;
+    display: block;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Titres principaux - Commune */
+.single-chronique .chronique-title {
+    font-weight: 700;
+    text-align: center;
+    margin: 3rem 0 1rem 0;
+    color: var(--dark-text);
+}
+
+
+/* Conteneur meta (pour single articles et chroniques) */
+.chronique-meta {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    margin: 2rem 0 4rem 0;
+}
+
+/* Date de publication - Commune */
+.single-date {
+    font-style: italic;
+    margin-top: 1rem;
+    margin-bottom: 3rem;
+    font-size: 0.9rem;
+    text-align: start;
+}
+
+/* ==========================================
+   SINGLES - Spécifiques aux Chroniques
+   ========================================== */
+
+/* Sous-titres dans les titres (auteurs, etc.) */
+.chronique-title span,
+.chronique-title em {
+    font-style: italic;
+    color: #555;
+    font-size: clamp(2rem, 2.5vw, 3rem);
+}
+
+/* Layout spécifique chroniques */
+.chronique-content,
+.article-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.chronique-text {
+    flex: 2;
+    min-width: 250px;
+}
+
+.chronique-text h2 {
+    font-size: clamp(1.8rem, 2vw, 2.2rem);
+    font-weight: 600;
+    color: var(--dark-text);
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--light-green);
+    padding-bottom: 0.4rem;
+}
+
+.chronique-text h3 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--dark-text);
+    margin-top: 1.2rem;
+    margin-bottom: 0.7rem;
+}
+
+/* Notation par étoiles */
+.chronique-rating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+.chronique-rating ion-icon {
+    font-size: 1.5rem;
+    color: #FFD700;
+    --ionicon-stroke-width: 48px;
+}
+
+.chronique-rating ion-icon[name="star-outline"] {
+    color: #DDD;
+}
+
+.rating-value {
+    margin-left: 0.5rem;
+    font-size: 1rem;
+    color: var(--dark-text);
+    font-weight: 600;
+}
+
+/* Image de couverture */
+.chronique-content .chronique-image {
+    flex: 1;
+    text-align: center;
+}
+
+.chronique-content .chronique-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.book-info {
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    margin: 0.5rem 0 1rem 3rem;
+    font-size: 0.95rem;
+    color: var(--dark-text);
+}
+
+@media (max-width: 768px) {
+
+    .chronique-content,
+    .article-content {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+
+    .chronique-image {
+        margin-bottom: 1.5rem;
+    }
+}
+
+
+/* ==========================================
+   SINGLES - Spécifiques aux Articles
+   ========================================== */
+
+/* Layout spécifique chroniques */
+.article-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+/* Image de couverture */
+.article-content .chronique-image {
+    flex: 1;
+    text-align: center;
+}
+
+.article-content .chronique-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+    .article-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .chronique-image {
+        margin-bottom: 1.5rem;
+    }
+}

@@ -1,0 +1,302 @@
+/* ==========================================
+   NAVIGATION - Menu, Filtres, Recherche
+   ========================================== */
+
+/* ####################### */
+/* Menu Toggle (Hamburger) */
+/* ####################### */
+
+.menu-toggle {
+    display: none;
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 99px;
+    background-color: var(--dark-text);
+    cursor: pointer;
+    z-index: 102;
+    transition: background-color 0.3s ease;
+}
+
+.menu-toggle:hover {
+    background-color: var(--light-green);
+}
+
+/* a partir de là, il faut mettre dans media si hamburger ne se comporte pas comme souhaité */
+.hamburger {
+    position: relative;
+    top: calc(50% - 2px);
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 32px;
+}
+
+.hamburger > span,
+.hamburger > span::before,
+.hamburger > span::after {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    border-radius: 99px;
+    background-color: var(--light);
+    transition-duration: .25s;
+}
+
+.hamburger > span::before {
+    content: '';
+    top: -8px;
+}
+
+.hamburger > span::after {
+    content: '';
+    top: 8px;
+}
+
+.menu-toggle.is-active .hamburger > span {
+    transform: rotate(45deg);
+}
+
+.menu-toggle.is-active .hamburger > span::before {
+    top: 0;
+    transform: rotate(0deg);
+}
+
+.menu-toggle.is-active .hamburger > span::after {
+    top: 0;
+    transform: rotate(90deg);
+}
+
+
+@media (max-width: 900px) {
+
+    .menu-toggle {
+        display: block;
+        z-index: 2000;
+    }
+}
+
+/* ####################### */
+/* Menu et filtres */
+/* ####################### */
+
+.posts-filter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.posts-filter ul {
+    width: 80%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 2rem;
+    padding: 1rem 0;
+    border-top: 2px solid var(--dark-text);
+    border-bottom: 2px solid var(--dark-text);
+    background: var(--light);
+    transition: all 0.3s ease;
+}
+
+.filter-item {
+    font-weight: 600;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    cursor: pointer;
+    color: var(--dark-text);
+}
+
+.filter-item.is-active, 
+.filter-item:hover {
+    background-color: var(--light-green);
+    padding: 19px 10px;
+    color: var(--dark-text);
+    transition: 0.2s ease-in-out;
+    border-radius: 4px;
+}
+
+
+@media (max-width: 1024px) {
+    .post-filter {
+        flex-wrap: wrap; /* Permet aux filtres de passer à la ligne si nécessaire */
+        gap: 0.5rem;
+        padding: 1rem 0;
+    }
+
+    .filter-item {
+        font-size: 1rem; /* Réduit légèrement la taille */
+    }
+}
+
+@media (max-width: 900px) {
+    .post-filter {
+        column-gap: 5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 2rem;
+        gap: 1.5rem;
+    }
+    
+    .posts-filter ul {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3rem;
+        background: var(--light);
+        position: fixed;
+        top: 110px;
+        right: 2rem;
+        width: 50%;
+        padding: 1rem 2rem;
+        z-index: 1500;
+        border: 2px solid var(--dark-text);
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+        pointer-events: none;
+    }
+
+    .posts-filter ul.is-active {
+        display: flex;
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        pointer-events: all
+    }
+
+    .filter-item {
+        font-size: 1.1rem;
+        padding: 0.5rem 1rem;
+        width: 100%;
+        text-align: center;
+        transition: background-color 0.2s ease;
+    }
+
+    .filter-item:hover, .filter-item.is-active {
+        background-color: var(--light-green);
+        padding: 12px 10px;
+    }
+}
+
+/* ####################### */
+/* Barre de recherche responsive */
+/* ####################### */
+
+/* Par défaut (desktop) : recherche dans le menu, recherche mobile cachée */
+.search-mobile {
+    display: none;
+}
+
+.search-desktop {
+    display: flex;
+}
+
+/* Style de la recherche mobile sous le logo */
+.posts-filter .search {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    max-width: 400px;
+    margin: 0 auto;
+}
+    
+.posts-filter .search input {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 200px;
+    box-shadow: 0 4px 14px hsl(355deg 25% 15% /10%);
+}
+    
+.posts-filter .search button {
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+    color:var(--light);
+    border: 1px solid var(--dark-text);
+    border-radius: 4px;
+    cursor: pointer;
+}
+    
+.posts-filter .search button:hover {
+     background-color: var(--light-green);
+}
+
+/* Mobile (≤900px) : recherche sous le logo, recherche du menu cachée */
+@media (max-width: 900px) {
+    .search-mobile {
+        display: block;
+        margin: 1rem 2rem;
+        text-align: center;
+    }
+    
+    .search-desktop {
+        display: none;
+    }
+    
+    /* Style de la recherche mobile sous le logo */
+    .search-mobile .search {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    
+    .search-mobile .search input {
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        width: 200px;
+        box-shadow: 0 4px 14px hsl(355deg 25% 15% /10%);
+    }
+    
+    .search-mobile .search button {
+        padding: 0.5rem 1rem;
+        background-color: transparent;
+        color:var(--light);
+        border: 1px solid var(--dark-text);
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    
+    .search-mobile .search button:hover {
+        background-color: var(--light-green);
+    }
+}
+
+
+/* ####################### */
+/* Menus déroulants (filtres) */
+/* ####################### */
+
+.filters-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--light-green);
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.filters-container select {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border: 2px solid var(--dark-text);
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .filters-container {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
