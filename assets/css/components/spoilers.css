@@ -1,0 +1,120 @@
+/* ============================================
+   BLOC DÃ‰TAILS POUR SPOILERS - STYLE BOUTON
+   ============================================ */
+
+/* Container du bloc dÃ©tails */
+.wp-block-details {
+    margin: 2rem 0;
+    border: none;
+    background: transparent;
+}
+
+/* Le titre (summary) = BOUTON */
+.wp-block-details summary {
+    /* Apparence bouton */
+    display: inline-block;
+    text-align: center;
+    padding: 15px 30px;
+    border: 2px solid var(--wine);
+    color: var(--dark-text);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    
+    /* Animation */
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px var(--wine);
+    
+    /* Supprimer le marker par dÃ©faut */
+    list-style: none;
+    
+    /* IcÃ´ne personnalisÃ©e */
+    position: relative;
+    padding-right: 50px;
+}
+
+/* Supprimer le triangle par dÃ©faut (WebKit) */
+.wp-block-details summary::-webkit-details-marker {
+    display: none;
+}
+
+/* Ajouter une icÃ´ne custom (flÃ¨che) */
+.wp-block-details summary::after {
+    content: "â–¼";
+    color: var(--white);
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+
+/* Effet hover sur le bouton */
+.wp-block-details summary:hover {
+    background: var(--wine);
+    color: var(--light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px var(--wine);
+}
+
+/* Rotation de la flÃ¨che quand ouvert */
+.wp-block-details[open] summary::after {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+/* LE CONTENU (quand affichÃ©) */
+.wp-block-details[open] {
+    /* Pas de bordure/box autour */
+    background: var(--light);
+}
+
+/* Le contenu des spoilers */
+.wp-block-details > *:not(summary) {
+    /* Apparence contenu */
+    background: var(--light);
+    border-left: 4px solid #811956;
+    padding: 25px;
+    margin-top: 15px;
+    border-radius: 0 8px 8px 0;
+    
+    /* Animation d'apparition */
+    animation: slideDown 0.4s ease-out;
+}
+
+/* Animation slide down */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Style du texte dans le contenu */
+.wp-block-details p {
+    margin-bottom: 1em;
+    line-height: 1.7;
+    color: var(--dark-text);
+}
+
+.wp-block-details p:last-child {
+    margin-bottom: 0;
+}
+
+/* Responsive mobile */
+@media (max-width: 768px) {
+    .wp-block-details summary {
+        font-size: 14px;
+        padding: 12px 40px 12px 20px;
+    }
+    
+    .wp-block-details summary::after {
+        right: 15px;
+    }
+}
