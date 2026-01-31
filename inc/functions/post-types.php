@@ -35,14 +35,39 @@ function create_chroniques_post_type() {
         'show_in_rest' => true,
         'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'comments'),
         'template' => array(
-            array('core/heading', array('level' => 2, 'content' => 'Résumé')),
-            array('core/paragraph', array('placeholder' => 'Écris ici ton résumé...')),
-            array('core/heading', array('level' => 2, 'content' => 'Thèmes abordés')),
-            array('core/paragraph', array('placeholder' => 'Explique ici quels thèmes sont abordés...')),
-            array('core/heading', array('level' => 2, 'content' => 'Avis')),
-            array('core/paragraph', array('placeholder' => 'Écris ici tes impressions sur le livre...')),
-        ),
-        'template_lock' => false,
+            // Résumé
+            array('core/heading', array(
+                'level' => 2, 
+                'content' => 'Résumé'
+            )),
+            array('core/paragraph', array(
+                'placeholder' => 'Écris ici ton résumé...'
+            )),
+            
+            // Impressions
+            array('core/heading', array(
+                'level' => 2, 
+                'content' => 'Impressions'
+            )),
+            array('core/paragraph', array(
+                'placeholder' => 'Écris ici tes impressions sur le livre...'
+            )),
+            
+            // Avis avec SPOILER
+            array('core/heading', array(
+                'level' => 2, 
+                'content' => '⚠️ Avis avec SPOILER'
+            )),
+            array('core/details', array(
+                'summary' => 'Clique ici pour te faire spoiler',
+                'showContent' => false
+            ), array(
+                array('core/paragraph', array(
+                    'placeholder' => 'Écris ici ton avis détaillé avec spoilers...'
+                ))
+            )), // ← Correction ici : )), au lieu de ))
+        ), // ← Fermeture du tableau 'template'
+        'template_lock' => false, // Optionnel : permet de modifier la structure dans l'éditeur
     ));
 }
 add_action('init', 'create_chroniques_post_type');
@@ -236,15 +261,6 @@ function chroniques_save_meta_data($post_id) {
     }
 }
 add_action('save_post', 'chroniques_save_meta_data');
-
-// Force l'affichage de l'image mise en avant
-function force_featured_image_for_chroniques() {
-    $screen = get_current_screen();
-    if ($screen && $screen->post_type === 'chroniques') {
-        add_meta_box('postimagediv', __('Image mise en avant'), 'post_thumbnail_meta_box', 'chroniques', 'side', 'default');
-    }
-}
-add_action('add_meta_boxes', 'force_featured_image_for_chroniques');
 
 // Auto-extrait
 function chroniques_auto_excerpt($post_id) {

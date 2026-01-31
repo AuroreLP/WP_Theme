@@ -11,6 +11,7 @@ function turningpages_enqueue_styles() {
     $css_files = array(
         'navigation' => '/assets/css/components/navigation.css',
         'components' => '/assets/css/components/components.css',
+        'spoilers' => '/assets/css/components/spoilers.css',
         'posts' => '/assets/css/pages/posts.css',
         'singles' => '/assets/css/layouts/singles.css',
         'comments' => '/assets/css/components/comments.css',
