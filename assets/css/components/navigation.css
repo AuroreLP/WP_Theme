@@ -14,14 +14,14 @@
     width: 60px;
     height: 60px;
     border-radius: 99px;
-    background-color: var(--dark-text);
+    background-color: var(--other-bg-color);
     cursor: pointer;
     z-index: 102;
-    transition: background-color 0.3s ease;
+    transition: var(--other-bg-color) 0.3s ease;
 }
 
 .menu-toggle:hover {
-    background-color: var(--light-green);
+    background-color: var(--hover-bg);
 }
 
 /* a partir de là, il faut mettre dans media si hamburger ne se comporte pas comme souhaité */
@@ -41,7 +41,7 @@
     width: 100%;
     height: 4px;
     border-radius: 99px;
-    background-color: var(--light);
+    background-color: var(--bg-color);
     transition-duration: .25s;
 }
 
@@ -81,43 +81,56 @@
 /* ####################### */
 /* Menu et filtres */
 /* ####################### */
-
-.posts-filter {
+header nav {
     display: flex;
-    align-items: center;
     justify-content: center;
-    position: relative;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 2rem;
 }
+
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    gap: 50px;
+    margin-top: 1rem;
+    z-index: 10;
+}
+    
 
 .posts-filter ul {
     width: 80%;
+    top: 100%;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     gap: 2rem;
     padding: 1rem 0;
-    border-top: 2px solid var(--dark-text);
-    border-bottom: 2px solid var(--dark-text);
-    background: var(--light);
+    border-top: 2px solid var(--border-color);
+    border-bottom: 2px solid var(--border-color);
     transition: all 0.3s ease;
 }
 
-.filter-item {
-    font-weight: 600;
-    font-size: clamp(1rem, 1.5vw, 1.2rem);
-    cursor: pointer;
-    color: var(--dark-text);
+nav a {
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  text-decoration: none;
+  color: var(--color-text);
+  padding: 0.4rem 0;
+  transition: color 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
 
-.filter-item.is-active, 
-.filter-item:hover {
-    background-color: var(--light-green);
-    padding: 19px 10px;
-    color: var(--dark-text);
-    transition: 0.2s ease-in-out;
-    border-radius: 4px;
+nav a:hover,
+nav a.is-active {
+  color: var(--border-color);
+  font-size: clamp(1.4rem, 1.9vw, 1.6rem);
+  font-weight: 700;
 }
 
+nav:has(a:hover) a:not(:hover) {
+  opacity: 0.3;
+}
 
 @media (max-width: 1024px) {
     .post-filter {
@@ -132,28 +145,27 @@
 }
 
 @media (max-width: 900px) {
-    .post-filter {
-        column-gap: 5rem;
+
+    nav {
         display: flex;
-        flex-direction: column;
+        justify-content: center;
         align-items: center;
-        margin-top: 2rem;
-        gap: 1.5rem;
+        gap: 50px;
     }
     
     .posts-filter ul {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 3rem;
-        background: var(--light);
+        gap: 2rem;
+        background: var(--bg-color);
         position: fixed;
         top: 110px;
         right: 2rem;
-        width: 50%;
-        padding: 1rem 2rem;
+        width: 40%;
+        padding: 2rem 1rem;
         z-index: 1500;
-        border: 2px solid var(--dark-text);
+        border: 2px solid var(--color-text);
         border-radius: 12px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         opacity: 0;
@@ -170,17 +182,23 @@
         pointer-events: all
     }
 
-    .filter-item {
-        font-size: 1.1rem;
-        padding: 0.5rem 1rem;
-        width: 100%;
-        text-align: center;
-        transition: background-color 0.2s ease;
+    nav a {
+        font-size: 18px;
+        font-weight: 700;
+        text-decoration: none;
+        padding: 0.4rem 0;
+        transition: color 0.3s ease-in-out, opacity 0.3s ease-in-out;
     }
 
-    .filter-item:hover, .filter-item.is-active {
-        background-color: var(--light-green);
-        padding: 12px 10px;
+    nav a:hover,
+    nav a.is-active {
+        color: var(--border-color);
+        font-weight: bold;
+        font-size: clamp(1.4rem, 1.9vw, 1.6rem);
+    }
+
+    nav:has(a:hover) a:not(:hover) {
+        opacity: 0.3;
     }
 }
 
@@ -208,7 +226,7 @@
     
 .posts-filter .search input {
     padding: 0.5rem;
-    border: 1px solid #ddd;
+    border: 1px solid var(--underline);
     border-radius: 4px;
     width: 200px;
     box-shadow: 0 4px 14px hsl(355deg 25% 15% /10%);
@@ -217,22 +235,40 @@
 .posts-filter .search button {
     padding: 0.5rem 1rem;
     background-color: transparent;
-    color:var(--light);
-    border: 1px solid var(--dark-text);
+    border: 1px solid var(--color-text);
     border-radius: 4px;
     cursor: pointer;
 }
     
 .posts-filter .search button:hover {
-     background-color: var(--light-green);
+     background-color: var(--hover-bg);
+     color: var(--bg-color);
 }
 
+
+#btn-search .ionicon {
+    width: 20px;
+    height: 20px;
+    fill: var(--color-text);
+    transition: fill 0.3s ease;
+}
+
+#btn-search:hover .ionicon {
+    fill: var(--bg-color);
+}
+
+
+/* Mobile (≤900px) : recherche sous le logo, recherche du menu cachée */
 /* Mobile (≤900px) : recherche sous le logo, recherche du menu cachée */
 @media (max-width: 900px) {
     .search-mobile {
-        display: block;
-        margin: 1rem 2rem;
+        display: block !important;
+        position: relative !important;
+        margin: 0 !important;
+        padding: 0 2rem !important;
         text-align: center;
+        width: 100%;
+        transform: translateY(0) !important; /* Force la position */
     }
     
     .search-desktop {
@@ -241,16 +277,17 @@
     
     /* Style de la recherche mobile sous le logo */
     .search-mobile .search {
-        display: flex;
+        display: flex !important;
         justify-content: center;
         gap: 0.5rem;
         max-width: 400px;
-        margin: 0 auto;
+        margin: 0 auto !important;
+        position: relative !important;
     }
     
     .search-mobile .search input {
         padding: 0.5rem;
-        border: 1px solid #ddd;
+        border: 1px solid var(--underline);
         border-radius: 4px;
         width: 200px;
         box-shadow: 0 4px 14px hsl(355deg 25% 15% /10%);
@@ -259,44 +296,72 @@
     .search-mobile .search button {
         padding: 0.5rem 1rem;
         background-color: transparent;
-        color:var(--light);
-        border: 1px solid var(--dark-text);
+        border: 1px solid var(--color-text);
         border-radius: 4px;
         cursor: pointer;
     }
     
     .search-mobile .search button:hover {
-        background-color: var(--light-green);
+        background-color: var(--hover-bg);
+        color: var(--bg-color);
     }
 }
-
 
 /* ####################### */
 /* Menus déroulants (filtres) */
 /* ####################### */
+.filters-wrapper {
+    text-align: center;
+    margin-bottom: 3rem;
+}
 
 .filters-container {
-    display: flex;
-    align-items: center;
+    display: inline-flex;
     justify-content: center;
-    color: var(--light-green);
+    color: var(--color-text);
     gap: 1rem;
-    margin-bottom: 2rem;
     flex-wrap: wrap;
 }
 
 .filters-container select {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 2.5rem 0.5rem 1rem;
     font-size: 1rem;
-    border: 2px solid var(--dark-text);
+    border: 2px solid var(--border-color);
     border-radius: 5px;
-    background-color: #fff;
     cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232b4743' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center; /* Position de la flèche */
+    background-size: 1.2em;
+    transition: all 0.3s ease;
 }
+
+/* Quand une option autre que "all" est sélectionnée */
+.filters-container select.is-active {
+    color: var(--dark);
+}
+
+.filters-container select:hover {
+    border-color: var(--hover-bg);
+}
+
+.filters-container select:focus {
+    outline: none;
+    border-color: var(--hover-bg);
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+}
+
 
 @media (max-width: 768px) {
     .filters-container {
         flex-direction: column;
         gap: 0.5rem;
+    }
+
+    .filters-container select {
+        width: 100%;
     }
 }

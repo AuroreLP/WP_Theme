@@ -7,51 +7,43 @@ get_header();
 $term = get_queried_object();
 ?>
 
-<main class="articles-archive">
+<main class="content">
     <div class="archive-header">
         <h1>Étiquette : <?php echo esc_html($term->name); ?></h1>
         <hr>
     </div>
 
-    <div class="articles-grid">
-        <?php if (have_posts()) : ?>
-            <?php while (have_posts()) : the_post(); ?>
-                <article class="article-card">
-                    <a href="<?php the_permalink(); ?>">
-                        <?php if (has_post_thumbnail()) : ?>
-                            <div class="article-thumbnail">
-                                <?php the_post_thumbnail('medium'); ?>
-                            </div>
-                        <?php endif; ?>
-                        
-                        <div class="article-info">
-                            <h2><?php the_title(); ?></h2>
-                            <span class="article-date"><?php echo esc_html(get_the_date('d.m.Y')); ?></span>
-                            
-                            <?php if (has_excerpt()) : ?>
-                                <p class="article-excerpt">
-                                    <?php the_excerpt(); ?>
-                                </p>
-                            <?php else : ?>
-                                <p class="article-excerpt">
-                                    <?php echo wp_trim_words(get_the_content(), 20, '...'); ?>
-                                </p>
-                            <?php endif; ?>
-                        </div>
-                    </a>
-                </article>
-            <?php endwhile; ?>
-            
-        <?php else : ?>
-            <p><?php echo esc_html('Aucun article trouvé pour cette étiquette.'); ?></p>
-        <?php endif; ?>
-    </div>
-    
-<!-- ===== PAGINATION ===== -->
-        <nav class="nav-pagination">
-            <ul class="pagination"></ul>
-        </nav>
+    <div class="container">
+        <div class="posts-grid">
+            <?php if (have_posts()) : ?>
+                <?php while (have_posts()) : the_post(); 
 
+                    // Récupérer la catégorie principale
+                    $categories = get_the_category();
+                    $category_slug = '';
+                    $category_name = '';
+                    if ($categories && !is_wp_error($categories)) {
+                        $category_slug = $categories[0]->slug;
+                        $category_name = $categories[0]->name;
+                    }
+
+                    // Appel du template part
+                    get_template_part('inc/template-parts/components/cards', 'article', [
+                        'category_slug' => $category_slug,
+                        'category_name' => $category_name,
+                    ]);
+
+                endwhile; ?>
+            <?php else : ?>
+                <p><?php echo esc_html('Aucun article trouvé pour cette étiquette.'); ?></p>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <!-- ===== PAGINATION ===== -->
+    <nav class="nav-pagination">
+        <ul class="pagination"></ul>
+    </nav>
 </main>
 
 <?php get_footer(); ?>

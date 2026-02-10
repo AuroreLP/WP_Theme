@@ -109,7 +109,19 @@ function display_chronique_nationalites_list() {
     if (!$nationalites || is_wp_error($nationalites)) return;
 
     foreach ($nationalites as $nation) {
-        echo '<li><a href="' . esc_url(get_term_link($nation)) . '">littérature ' . esc_html($nation->name) . '</a></li>';
+        echo '<li><a href="' . esc_url(get_term_link($nation)) . '">' . esc_html($nation->name) . '</a></li>';
+    }
+}
+
+/**
+ * Affiche les rôle en liste HTML avec liens vers archives
+ */
+function display_chronique_roles_list() {
+    $roles = get_the_terms(get_the_ID(), 'role');
+    if (!$roles || is_wp_error($roles)) return;
+
+    foreach ($roles as $role) {
+        echo '<li><a href="' . esc_url(get_term_link($role)) . '">' . esc_html($role->name) . '</a></li>';
     }
 }
 

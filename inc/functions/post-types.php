@@ -30,6 +30,7 @@ function create_chroniques_post_type() {
         ),
         'public' => true,
         'has_archive' => false,
+        'menu_position' => 5,
         'rewrite' => array('slug' => 'chroniques'),
         'menu_icon' => 'dashicons-edit-page',
         'show_in_rest' => true,
@@ -86,7 +87,7 @@ function create_chroniques_taxonomies() {
     ));
 
     // Nationalité
-    register_taxonomy('nationalite', 'chroniques', array(
+    register_taxonomy('nationalite', ['chroniques', 'artiste', 'post'], array(
         'label' => 'Nationalité',
         'hierarchical' => false,
         'show_ui' => true,
@@ -96,7 +97,7 @@ function create_chroniques_taxonomies() {
 
     // Genre et sous-genre
     register_taxonomy('genre', 'chroniques', array(
-        'label' => 'Genre du livre',
+        'label' => 'Genre',
         'hierarchical' => true,
         'show_ui' => true,
         'show_admin_column' => true,
@@ -104,8 +105,8 @@ function create_chroniques_taxonomies() {
     ));
 
     // Thèmes
-    register_taxonomy('theme', 'chroniques', array(
-        'label' => 'Thèmes du livre',
+    register_taxonomy('theme', ['chroniques', 'artiste', 'post'], array(
+        'label' => 'Thèmes',
         'hierarchical' => false,
         'show_ui' => true,
         'show_admin_column' => true,
@@ -131,6 +132,26 @@ function create_chroniques_taxonomies() {
         'show_in_menu' => true,
         'meta_box_cb' => 'post_categories_meta_box',
     ));
+
+    // type de média
+    register_taxonomy('type_media', 'chroniques', array(
+        'labels' => array(
+            'name' => 'Types de média',
+            'singular_name' => 'Type de média',
+            'search_items' => 'Rechercher un type',
+            'all_items' => 'Tous les types',
+            'edit_item' => 'Modifier le type',
+            'update_item' => 'Mettre à jour',
+            'add_new_item' => 'Ajouter un type',
+            'new_item_name' => 'Nouveau type',
+            'menu_name' => 'Types de média',
+        ),
+        'hierarchical' => true,
+        'show_ui' => true,
+        'show_admin_column' => true,
+        'show_in_rest' => true,
+        'rewrite' => array('slug' => 'type-media'),
+    ));
 }
 add_action('init', 'create_chroniques_taxonomies');
 
@@ -140,7 +161,7 @@ add_action('init', 'create_chroniques_taxonomies');
 function chroniques_add_meta_box() {
     add_meta_box(
         'chronique_details',
-        'Détails du livre',
+        'Détails',
         'chroniques_meta_box_html',
         'chroniques',
         'normal',
@@ -152,8 +173,13 @@ add_action('add_meta_boxes', 'chroniques_add_meta_box');
 function chroniques_meta_box_html($post) {
     wp_nonce_field('chroniques_meta_save', 'chroniques_meta_nonce');
 
+    $note = get_post_meta($post->ID, 'note_etoiles', true);
     $date_pub = get_post_meta($post->ID, 'date_publication', true);
+    $date_sortie = get_post_meta($post->ID, 'date_sortie', true);
     $pages = get_post_meta($post->ID, 'pages', true);
+    $saisons = get_post_meta($post->ID, 'saisons', true);
+    $duree = get_post_meta($post->ID, 'duree', true);
+    $duree_episode = get_post_meta($post->ID, 'duree_episode', true);
     $heures = get_post_meta($post->ID, 'heures_ecoute', true);
     $note = get_post_meta($post->ID, 'note_etoiles', true);
     ?>
@@ -165,11 +191,41 @@ function chroniques_meta_box_html($post) {
                style="width:200px;">
     </p>
     <p>
+        <label><strong>Année de sortie :</strong></label><br>
+        <input type="number" name="date_sortie"
+               value="<?php echo esc_attr($date_sortie); ?>"
+               min="1700" max="2100" placeholder="Ex: 2024"
+               style="width:200px;">
+    </p>
+    <p>
         <label><strong>Nombre de pages :</strong></label><br>
         <input type="number" name="pages"
                value="<?php echo esc_attr($pages); ?>"
                min="0" placeholder="Ex: 350"
                style="width:200px;">
+    </p>
+    <p>
+        <label><strong>Nombre de saisons :</strong></label><br>
+        <input type="number" name="saisons"
+               value="<?php echo esc_attr($saisons); ?>"
+               min="0" placeholder="Ex: 350"
+               style="width:200px;">
+    </p>
+    <p>
+        <label><strong>Durée de la vidéo :</strong></label><br>
+        <input type="number" name="duree"
+                value="<?php echo esc_attr($duree); ?>"
+                min="0"
+                placeholder="Durée en minutes (ex : 104)"
+                style="width:200px;">
+    </p>
+    <p>
+        <label><strong>Durée par épisode :</strong></label><br>
+        <input type="number" name="duree_episode"
+                value="<?php echo esc_attr($duree_episode); ?>"
+                min="0"
+                placeholder="Durée en minutes (ex : 104)"
+                style="width:200px;">
     </p>
     <p>
         <label><strong>Heures d'écoute (si livre audio) :</strong></label><br>
@@ -188,15 +244,6 @@ function chroniques_meta_box_html($post) {
                     <?php echo $i; ?> / 5
                 </option>
             <?php endfor; ?>
-        </select>
-    </p>
-    <p>
-        <label><strong>Genre de l'auteur :</strong></label><br>
-        <select name="sexe_auteur" style="width:200px;">
-            <option value="">-- Non renseigné --</option>
-            <option value="femme" <?php selected(get_post_meta($post->ID, 'sexe_auteur', true), 'femme'); ?>>Femme</option>
-            <option value="homme" <?php selected(get_post_meta($post->ID, 'sexe_auteur', true), 'homme'); ?>>Homme</option>
-            <option value="autre" <?php selected(get_post_meta($post->ID, 'sexe_auteur', true), 'autre'); ?>>Non-binaire</option>
         </select>
     </p>
     <?php
@@ -224,18 +271,6 @@ function chroniques_save_meta_data($post_id) {
     }
     
     // Sauvegarder avec la bonne sanitization
-    if (isset($_POST['date_publication'])) {
-        $year = absint($_POST['date_publication']); // Nombre entier positif
-        if ($year >= 1700 && $year <= 2100) {
-            update_post_meta($post_id, 'date_publication', $year);
-        }
-    }
-    
-    if (isset($_POST['pages'])) {
-        $pages = absint($_POST['pages']);
-        update_post_meta($post_id, 'pages', $pages);
-    }
-    
     if (isset($_POST['note_etoiles'])) {
         $note = sanitize_text_field($_POST['note_etoiles']);
         // Valider que c'est un nombre valide entre 0 et 5
@@ -243,6 +278,45 @@ function chroniques_save_meta_data($post_id) {
             update_post_meta($post_id, 'note_etoiles', $note);
         }
     }
+    
+    if (isset($_POST['date_publication'])) {
+        $year = absint($_POST['date_publication']); // Nombre entier positif
+        if ($year >= 1700 && $year <= 2100) {
+            update_post_meta($post_id, 'date_publication', $year);
+        }
+    }
+
+    if (isset($_POST['date_sortie'])) {
+        $year = absint($_POST['date_sortie']);
+
+        if ($year >= 1700 && $year <= 2100) {
+            update_post_meta($post_id, 'date_sortie', $year);
+        }
+    }
+    
+    if (isset($_POST['pages'])) {
+        $pages = absint($_POST['pages']);
+        update_post_meta($post_id, 'pages', $pages);
+    }
+
+    if (isset($_POST['saisons'])) {
+        $saisons = absint($_POST['saisons']);
+        update_post_meta($post_id, 'saisons', $saisons);
+    }
+
+    if (isset($_POST['duree'])) {
+        if ($_POST['duree'] !== '') {
+            update_post_meta($post_id, 'duree', absint($_POST['duree']));
+        } else {
+            delete_post_meta($post_id, 'duree');
+        }
+    }
+
+    if (isset($_POST['duree_episode'])) {
+        $duree_episode = absint($_POST['duree_episode']);
+        update_post_meta($post_id, 'duree_episode', $duree_episode);
+    }
+
     
     if (isset($_POST['heures_ecoute'])) {
         $heures = sanitize_text_field($_POST['heures_ecoute']);

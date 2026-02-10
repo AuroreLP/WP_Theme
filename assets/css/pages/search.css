@@ -1,133 +1,20 @@
-/* ============================================
-   STRUCTURE DES ARCHIVES CATEGORIES ET TAGS
-   ============================================ */
-
 .search-archive {
-    max-width: 90%;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 40px 20px;
-    overflow-x: hidden;
+    padding: 2rem 1rem;
 }
 
-.search-archive .post-box {
-    max-width: 100%;
-    box-sizing: border-box;
-}
-
-.search-header h1 {
-    font-size: clamp(2.5rem, 3vw, 3.3rem);
+.search-header {
+    margin-bottom: 2rem;
     text-align: center;
 }
 
-.search-header p {
-    text-align: center;
-}
-
-/* Grille des chroniques */
-.search-grid {
+/* La grille reprend la grille posts-grid */
+.posts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 30px;
-    margin-bottom: 50px;
-    width: 100%;
-    margin-top: 3rem;
-}
-
-/* Carte individuelle */
-.search-card {
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(26, 65, 31, 0.5);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-/* Lien sur toute la carte */
-.search-card > a {
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-
-.search-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-}
-
-.search-card:hover h2 {
-    color: var(--light-green);
-}
-
-/* Image de la chronique */
-.search-thumbnail {
-    width: 100%;
-    height: 400px;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-
-.search-thumbnail img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-    display: block;
-}
-
-.search-card:hover .chronique-thumbnail img {
-    transform: scale(1.05);
-}
-
-/* Informations de la chronique */
-.search-info {
-    padding: 20px;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.search-date {
-    font-size: 0.9rem;
-    color: #7f8c8d;
-    display: block;
-    margin-bottom: 15px;
-}
-
-/* Message si aucune chronique */
-.search-grid > p {
-    grid-column: 1 / -1;
-    text-align: center;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.1rem;
-    color: #7f8c8d;
-    padding: 40px 20px;
-}
-
-/* ============================================
-   RESPONSIVE
-   ============================================ */
-
-@media (max-width: 768px) {
-    
-    .article-thumbnail {
-        height: 300px;
-    }
-
-}
-
-@media (max-width: 480px) {
-    .articles-archive {
-        padding: 20px 15px;
-    }
-
-    
-    .articles-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-    
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin: 2rem auto;
+    justify-items: center;
+    max-width: 1200px; 
 }

@@ -7,58 +7,61 @@ get_header();
 $term = get_queried_object();
 ?>
 
-    <main class="chroniques-archive">
-        <div class="archive-header">
-            <h1>Littérature <?php echo esc_html($term->name); ?></h1>
-            <hr>
-        </div>
+<main class="content chroniques-archive">
 
-        <div class="chroniques-grid">
-            <?php if (have_posts()) : ?>
-                <?php while (have_posts()) : the_post(); ?>
-                    <article class="chronique-card">
-                        <a href="<?php the_permalink(); ?>">
-                            <?php if (has_post_thumbnail()) : ?>
-                                <div class="chronique-thumbnail">
-                                    <?php the_post_thumbnail('medium'); ?>
-                                </div>
-                            <?php endif; ?>
-                            
-                            <div class="chronique-info">
-                                <h2><?php the_title(); ?> - <?php 
-                                $auteurs = get_the_term_list(get_the_ID(), 'auteur', '', ', ');
-                                if ($auteurs) : ?>
-                                    <p class="chronique-author"><?php echo wp_kses_post($auteurs); ?></p>
-                                <?php endif; ?></h2>
-                                <span class="article-date"><?php echo esc_html(get_the_date('d.m.Y')); ?></span>
-                                
-                                <?php if (has_excerpt()) : ?>
-                                    <div class="chronique-excerpt">
-                                        <?php the_excerpt(); ?>
-                                    </div>
-                                <?php endif; ?>
-                                
-                                <?php 
-                                $note = get_post_meta(get_the_ID(), 'note_etoiles', true);
-                                if ($note) : ?>
-                                    <div class="chronique-rating-mini">
-                                        <span class="rating-value"><?php echo esc_html($note); ?>/5 ⭐</span>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-                        </a>
-                    </article>
-                <?php endwhile; ?>
-                
-            <?php else : ?>
-                <p><?php echo esc_html('Aucune chronique trouvée pour cette nationalité'); ?></p>
-            <?php endif; ?>
-        </div>
-        <!-- ===== PAGINATION ===== -->
-        <nav class="nav-pagination">
-            <ul class="pagination"></ul>
-        </nav>
-    </main>
-</section>
+    <div class="archive-header">
+        <h1>Pays : <?php echo esc_html($term->name); ?></h1>
+        <hr>
+    </div>
+
+    <div class="container">
+        <?php if (have_posts()) : ?>
+            <div class="posts-grid">
+
+                <?php while (have_posts()) : the_post();
+
+                    // Genre affiché et genre principal pour filtrage
+                    $genre_info = get_chronique_genre_display();
+                    $term_genre = $genre_info['term'] ?? null;
+                    $genre_principal = ($term_genre && $term_genre->parent) ? get_term($term_genre->parent, 'genre') : $term_genre;
+
+                    // Thèmes
+                    $themes_slugs = get_chronique_themes() ? wp_list_pluck(get_chronique_themes(), 'slug') : array();
+
+                    // Nationalité (courante)
+                    $nations_terms = get_the_terms(get_the_ID(), 'nationalite');
+                    $nation_slug = ($nations_terms && !is_wp_error($nations_terms)) ? $nations_terms[0]->slug : '';
+
+                    // Type de média
+                    $media_terms = get_the_terms(get_the_ID(), 'type_media');
+                    $media_slug = ($media_terms && !is_wp_error($media_terms)) ? $media_terms[0]->slug : '';
+
+                    // Appel du template part
+                    get_template_part(
+                        'inc/template-parts/components/cards',
+                        'chronique',
+                        [
+                            'genre'  => $genre_principal ? $genre_principal->slug : '',
+                            'themes' => join(' ', $themes_slugs),
+                            'nation' => $nation_slug,
+                            'media'  => $media_slug
+                        ]
+                    );
+
+                endwhile; ?>
+
+            </div>
+
+            <!-- Pagination -->
+            <nav class="nav-pagination">
+                <ul class="pagination"></ul>
+            </nav>
+
+        <?php else : ?>
+            <p>Aucune chronique trouvée pour cette nationalité.</p>
+        <?php endif; ?>
+    </div>
+
+</main>
 
 <?php get_footer(); ?>

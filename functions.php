@@ -17,4 +17,7 @@ require_once get_template_directory() . '/inc/functions/taxonomy-helpers.php';
 require_once get_template_directory() . '/inc/functions/bilan-stats.php';
 require_once get_template_directory() . '/inc/functions/acf-config.php';
 
+// Helpers
+require_once get_template_directory() . '/inc/helpers/formatting.php';
+
 ?>

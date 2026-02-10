@@ -91,6 +91,7 @@ $count = absint(get_comments_number());
   <!-- Formulaire de commentaire principal -->
   <div class="main-comment-form">
     <h3>Laisser un commentaire</h3>
+    <p>Votre adresse email ne sera jamais publiée. Elle est uniquement utilisée pour modérer les commentaires.<br> Veuillez consulter la <a href="<?php echo esc_url(home_url('/politique-de-confidentialite/')); ?>">politique de confidentialité</a> pour en savoir plus.</p>
     <form action="<?php echo esc_url(site_url('/wp-comments-post.php')); ?>" method="POST" id="commentform" class="comment-form"> 
       <?php wp_nonce_field('comment_main_' . get_the_ID(), 'comment_nonce'); ?>
       

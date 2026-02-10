@@ -15,7 +15,8 @@ function turningpages_enqueue_styles() {
         'posts' => '/assets/css/pages/posts.css',
         'singles' => '/assets/css/layouts/singles.css',
         'comments' => '/assets/css/components/comments.css',
-        'bilan' => '/assets/css/layouts/bilan.css'
+        'bilan' => '/assets/css/layouts/bilan.css',
+        'theme-switcher' => '/assets/css/components/theme-switcher.css'
     );
     
     foreach ($css_files as $handle => $file) {
@@ -31,7 +32,7 @@ function turningpages_enqueue_styles() {
     }
     
     // Style pour les archives de taxonomies (chargé conditionnellement)
-    if (is_tax(array('genre', 'theme', 'nationalite', 'auteur'))) {
+    if (is_tax(array('genre', 'theme', 'nationalite', 'role')) || is_page_template('page-artistes.php')) {
         $taxonomy_file = get_template_directory() . '/assets/css/pages/taxonomy-archives.css';
         if (file_exists($taxonomy_file)) {
             wp_enqueue_style(
@@ -83,9 +84,35 @@ function turningpages_enqueue_scripts() {
     wp_enqueue_script(
         'turningpages-app',
         get_template_directory_uri() . '/assets/js/app.js',
-        array('jquery'), // dépendance
+        array('jquery'),
         null,
-        true // chargé dans le footer
+        true
+    );
+
+     // JS pour le switcher de thème
+    wp_enqueue_script(
+        'theme-switcher', 
+        get_template_directory_uri() . '/assets/js/modules/theme-switcher.js', 
+        array(),
+        '1.0', 
+        true
+    );
+
+    wp_localize_script(
+        'theme-switcher',
+        'themeData',
+        [
+            'themePath' => get_template_directory_uri()
+        ]
+    );
+
+     // JS pour le style des filtres
+    wp_enqueue_script(
+        'ui-filters',
+        get_template_directory_uri() . '/assets/js/modules/ui-filters.js', 
+        array(),
+        '1.0', 
+        true
     );
 
         // Filtres ET pagination pour la page chroniques
@@ -103,6 +130,15 @@ function turningpages_enqueue_scripts() {
             get_template_directory_uri() . '/assets/js/modules/filter-articles.js',
             array(),
             filemtime(get_template_directory() . '/assets/js/modules/filter-articles.js'),
+            true
+        );
+    }
+    elseif (is_page_template('page-artistes.php')) {
+        wp_enqueue_script(
+            'filter-artistes-script',
+            get_template_directory_uri() . '/assets/js/modules/filter-artistes.js',
+            array(),
+            filemtime(get_template_directory() . '/assets/js/modules/filter-artistes.js'),
             true
         );
     }

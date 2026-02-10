@@ -1,4 +1,4 @@
-   <?php 
+<?php 
    global $template;
    echo '<!-- Template: ' . basename($template) . ' -->';
    ?>
@@ -15,22 +15,32 @@
 <?php wp_body_open(); ?>
 
 <section class="blog">
-    <!-- Navigation -->
+
+    <!-- Hamburger reste global -->
     <div class="menu-toggle">
         <div class="hamburger">
             <span></span>
         </div>
     </div>
-    <!-- Hero -->
-    <div class="hero">
-        <a href="<?php echo home_url('/'); ?>" class="logo">
-            <img src="<?php echo esc_url( get_template_directory_uri() ); ?>/assets/images/logos/logo_pensees_livresques.svg" alt="logo Pensées livresques">
-        </a>
-        <p class="home-subtitle">Le plaisir d'apprendre en lisant</p>
-        <div class="search-mobile">
-            <?php get_search_form(); ?>
-        </div>
-    </div>
 
-<?php get_template_part('inc/template-parts/navigation/nav'); ?>
-    
+    <!-- Header -->
+    <header class="site-header">
+        <!-- Logo / Hero -->
+        <div class="hero">
+            <a href="<?php echo home_url('/'); ?>" class="site-logo">
+                <img 
+                    id="site-logo"
+                    src="<?php echo esc_url( get_template_directory_uri() ); ?>/assets/images/logos/light_logo.png"
+                    alt="Logo Turning Pages"
+                >
+            </a>
+
+            <div class="search-mobile">
+                <?php get_search_form(); ?>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <?php get_template_part('inc/template-parts/navigation/nav'); ?>
+
+    </header>

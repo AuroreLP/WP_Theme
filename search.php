@@ -1,73 +1,95 @@
 <?php
-/**
- * Template pour les résultats de recherche
- */
 get_header();
-
-$term = get_queried_object();
 ?>
 
-    <main class="search-archive">
-        <div class="search-header">
-            <h1>Résultats pour : "<?php echo esc_html(get_search_query()); ?>"</h1>
-            <p><?php echo esc_html($wp_query->found_posts); ?> résultat(s) trouvé(s)</p>
-            <hr>
-        </div>
+<main class="search-archive">
 
-        <div class="search-grid">
-            <?php if (have_posts()) : ?>
-                <?php while (have_posts()) : the_post(); ?>
-                    <article class="search-card">
-                        <a href="<?php the_permalink(); ?>">
-                            <?php if (has_post_thumbnail()) : ?>
-                                <div class="search-thumbnail">
-                                    <?php the_post_thumbnail('medium'); ?>
-                                </div>
-                            <?php endif; ?>
-                            
-                            <div class="search-info">
-                                <h2><?php the_title(); ?></h2>
-                                <span class="search-date"><?php echo esc_html(get_the_date('d.m.Y')); ?></span>
-                                
-                                <?php if (has_excerpt()) : ?>
-                                <p class="chronique-excerpt">
-                                    <?php the_excerpt(); ?>
-                                </p>
-                                <?php endif; ?>
-                                
-                            </div>
-                        </a>
-                    </article>
-                <?php endwhile; ?>
-                
-                <div class="pagination">
-                    <?php 
-                    echo paginate_links(array(
-                        'prev_text' => '« Précédent',
-                        'next_text' => 'Suivant »',
-                    )); 
-                    ?>
-                </div>
-                
-            <?php else : ?>
-            <div class="no-results">
-                <p>Aucun résultat trouvé pour "<?php echo esc_html(get_search_query()); ?>".</p>
-                <p>Suggestions :</p>
-                <ul>
-                    <li>Vérifiez l'orthographe de vos mots-clés</li>
-                    <li>Essayez des mots-clés différents</li>
-                    <li>Essayez des mots-clés plus généraux</li>
-                </ul>
-                
-                <div class="search-again">
-                    <form action="<?php echo esc_url(home_url('/')); ?>" method="get">
-                        <input type="search" name="s" placeholder="Nouvelle recherche..." required>
-                        <button type="submit">Rechercher</button>
-                    </form>
-                </div>
-            </div>
+    <div class="heading search-header">
+        <h1>Résultats pour : "<?php echo get_search_query(); ?>"</h1>
+        <p><?php echo sprintf('%d résultat(s) trouvé(s)', $wp_query->found_posts); ?></p>
+    </div>
+
+    <div class="posts-grid">
+        <?php if (have_posts()) : ?>
+            <?php while (have_posts()) : the_post(); 
+
+            $excerpt = get_the_excerpt() ?: wp_trim_words(get_the_content(), 20, '...');
+
+            // Déterminer la taxonomie selon le type de contenu
+            $taxonomy = '';
+            $term_name = '';
+
+            switch (get_post_type()) {
+                case 'chroniques':
+                    $taxonomy = 'genre';
+                    break;
+
+                case 'artiste':
+                    $taxonomy = 'role';
+                    break;
+
+                case 'post':
+                    $taxonomy = 'category';
+                    break;
+            }
+
+            // Récupérer le terme
+            if ($taxonomy) {
+                $terms = get_the_terms(get_the_ID(), $taxonomy);
+
+                if ($terms && !is_wp_error($terms)) {
+                    $term_name = $terms[0]->name;
+                }
+            }
+        ?>
+
+                <article class="post-box">
+                    <!-- Image -->
+                    <div class="article-img">
+                        <?php if (has_post_thumbnail()) : ?>
+                            <?php the_post_thumbnail('medium'); ?>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- Texte -->
+                    <div class="article-presentation">
+                        <?php if ($term_name) : ?>
+                            <span class="category">
+                                <?php echo esc_html($term_name); ?>
+                            </span>
+                        <?php endif; ?>
+                        <h2 class="article-title">
+                            <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                        </h2>
+                        <span class="article-date"><?php echo get_the_date('d.m.Y'); ?></span>
+                    </div>
+
+                    <!-- Overlay -->
+                    <div class="article-overlay">
+                        <div class="overlay-content">
+                            <p><?php echo esc_html($excerpt); ?></p>
+                            <a class="article-btn" href="<?php the_permalink() ?>" aria-label="Lire l'article">
+                                Lire l'article
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            <?php endwhile; ?>
+        <?php else : ?>
+            <p>Aucun résultat trouvé pour votre recherche.</p>
         <?php endif; ?>
-        </div>
-    </main>
+    </div>
+
+    <!-- Pagination -->
+    <nav class="nav-pagination">
+        <?php
+        echo paginate_links(array(
+            'prev_text' => '«',
+            'next_text' => '»',
+        ));
+        ?>
+    </nav>
+
+</main>
 
 <?php get_footer(); ?>

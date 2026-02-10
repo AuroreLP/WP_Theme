@@ -13,23 +13,28 @@
         $query = new WP_Query($args);
 
         if ($query->have_posts()) :
-            while ($query->have_posts()) :
-                $query->the_post();
-        ?>
-            <li class="other-single-box">
-                <?php if (has_post_thumbnail()) : ?>
-                    <?php the_post_thumbnail('medium'); ?>
-                <?php else : ?>
-                    <div class="no-thumbnail">
-                        <img src="<?php echo esc_url('https://via.placeholder.com/300x200?text=Article'); ?>" alt="<?php echo esc_attr('Image de l\'article : ' . get_the_title()); ?>">
-                    </div>
-                <?php endif; ?>
-                <div class="other-box-content">
-                    <h5><?php the_title(); ?></h5>
-                    <a href="<?php echo esc_url(get_permalink()); ?>" class="read-more">Lire l'article</a>
-                </div>
-            </li>
-        <?php 
+                while ($query->have_posts()) :
+                    $query->the_post();
+
+                    // Catégorie principale
+                    $categories = get_the_category();
+                    $category_slug = '';
+                    $category_name = '';
+
+                    if ($categories && !is_wp_error($categories)) {
+                        $category_slug = $categories[0]->slug;
+                        $category_name = $categories[0]->name;
+                    }
+
+            get_template_part(
+                'inc/template-parts/components/cards',
+                'article',
+                [
+                    'category_slug' => $category_slug,
+                    'category_name' => $category_name
+                ]
+            );
+            
             endwhile;
         endif; 
         wp_reset_postdata();

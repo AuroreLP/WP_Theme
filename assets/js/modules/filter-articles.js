@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const filterSelect = document.getElementById("filter-category");
     const paginationContainer = document.querySelector(".pagination");
 
-    const postsPerPage = 6;
+    const postsPerPage = 8;
     let currentPage = 1;
     let filteredPosts = [...posts];
 

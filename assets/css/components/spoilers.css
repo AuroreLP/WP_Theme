@@ -15,8 +15,8 @@
     display: inline-block;
     text-align: center;
     padding: 15px 30px;
-    border: 2px solid var(--wine);
-    color: var(--dark-text);
+    border: 2px solid var(--border-color);
+    color: var(--color-text);
     border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
@@ -25,7 +25,7 @@
     
     /* Animation */
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px var(--wine);
+    box-shadow: 0 4px 12px var(--border-color);
     
     /* Supprimer le marker par dÃ©faut */
     list-style: none;
@@ -43,7 +43,7 @@
 /* Ajouter une icÃ´ne custom (flÃ¨che) */
 .wp-block-details summary::after {
     content: "â–¼";
-    color: var(--white);
+    color: var(--color-text);
     position: absolute;
     right: 20px;
     top: 50%;
@@ -54,10 +54,10 @@
 
 /* Effet hover sur le bouton */
 .wp-block-details summary:hover {
-    background: var(--wine);
-    color: var(--light);
+    background: var(--hover-bg);
+    color: var(--other-color-text);
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px var(--wine);
+    box-shadow: 0 6px 16px var(--dark);
 }
 
 /* Rotation de la flÃ¨che quand ouvert */
@@ -68,14 +68,14 @@
 /* LE CONTENU (quand affichÃ©) */
 .wp-block-details[open] {
     /* Pas de bordure/box autour */
-    background: var(--light);
+    background: var(--bg-color);
 }
 
 /* Le contenu des spoilers */
 .wp-block-details > *:not(summary) {
     /* Apparence contenu */
-    background: var(--light);
-    border-left: 4px solid #811956;
+    background: var(--bg-color);
+    border-left: 4px solid var(--border-color);
     padding: 25px;
     margin-top: 15px;
     border-radius: 0 8px 8px 0;
@@ -100,7 +100,7 @@
 .wp-block-details p {
     margin-bottom: 1em;
     line-height: 1.7;
-    color: var(--dark-text);
+    color: var(--color-text);
 }
 
 .wp-block-details p:last-child {

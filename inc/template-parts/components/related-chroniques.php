@@ -16,19 +16,23 @@
         if ($query->have_posts()) :
             while ($query->have_posts()) :
                 $query->the_post();
-        ?>
-            <li class="other-single-box">
-                <?php if (has_post_thumbnail()) : ?>
-                    <?php the_post_thumbnail('medium'); ?>
-                <?php else : ?>
-                    <img src="<?php echo esc_url(get_template_directory_uri() . '/images/default_thumbnail.jpg'); ?>" alt="<?php echo esc_attr('Image de la chronique : ' . get_the_title()); ?>">
-                <?php endif; ?>
-                <div class="other-box-content">
-                    <h5><?php the_title(); ?></h5>
-                    <a href="<?php the_permalink(); ?>" class="read-more">Lire la chronique</a>
-                </div>
-            </li>
-        <?php 
+                
+                $genres = wp_get_post_terms(get_the_ID(), 'chronique_genre');
+
+                $genre_principal = null;
+
+                if (!is_wp_error($genres) && !empty($genres)) {
+                    $genre_principal = $genres[0];
+                }
+                
+                get_template_part(
+                    'inc/template-parts/components/cards',
+                    'chronique',
+                    [
+                        'genre' => $genre_principal ? $genre_principal->name : ''
+                    ]
+                );
+
             endwhile; 
         endif; 
         wp_reset_postdata();

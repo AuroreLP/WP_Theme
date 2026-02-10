@@ -51,3 +51,11 @@ function custom_single_template($template) {
     
     return $template;
 }
+
+// utiliser classic editor au lieu de Gutenberg pour le cpt Artiste only
+add_filter('use_block_editor_for_post_type', function($use_block_editor, $post_type) {
+    if ($post_type === 'artiste') {
+        return false;
+    }
+    return $use_block_editor;
+}, 10, 2);
