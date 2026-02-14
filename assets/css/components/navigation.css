@@ -123,7 +123,7 @@ nav a {
 
 nav a:hover,
 nav a.is-active {
-  color: var(--border-color);
+  color: var(--dark);
   font-size: clamp(1.4rem, 1.9vw, 1.6rem);
   font-weight: 700;
 }
@@ -156,20 +156,19 @@ nav:has(a:hover) a:not(:hover) {
     .posts-filter ul {
         display: flex;
         flex-direction: column;
+        justify-content: center;
         align-items: center;
-        gap: 2rem;
+        gap: 3rem;
         background: var(--bg-color);
         position: fixed;
-        top: 110px;
-        right: 2rem;
-        width: 40%;
-        padding: 2rem 1rem;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        padding: 2rem;
         z-index: 1500;
-        border: 2px solid var(--color-text);
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         opacity: 0;
-        transform: translateY(-10px);
+        transform: translateX(100%);
         transition: all 0.3s ease;
         pointer-events: none;
     }
@@ -178,12 +177,12 @@ nav:has(a:hover) a:not(:hover) {
         display: flex;
         opacity: 1;
         visibility: visible;
-        transform: translateY(0);
-        pointer-events: all
+        transform: translateX(0);
+        pointer-events: all;
     }
 
     nav a {
-        font-size: 18px;
+        font-size: clamp(2.5rem, 5vw, 5rem);
         font-weight: 700;
         text-decoration: none;
         padding: 0.4rem 0;
@@ -194,7 +193,7 @@ nav:has(a:hover) a:not(:hover) {
     nav a.is-active {
         color: var(--border-color);
         font-weight: bold;
-        font-size: clamp(1.4rem, 1.9vw, 1.6rem);
+        font-size: clamp(3.5rem, 6vw, 5rem);
     }
 
     nav:has(a:hover) a:not(:hover) {
@@ -213,6 +212,131 @@ nav:has(a:hover) a:not(:hover) {
 
 .search-desktop {
     display: flex;
+    align-items: center;
+}
+
+/* Container de recherche plein écran (caché par défaut) */
+.search-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.search-overlay.is-active {
+    display: flex;
+    opacity: 1;
+}
+
+/* Bouton de fermeture de la recherche */
+.search-close {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    background: none;
+    border: none;
+    color: var(--light);
+    font-size: 3rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.5rem;
+    transition: transform 0.3s ease;
+}
+
+.search-close:hover {
+    transform: rotate(90deg);
+}
+
+/* Style de la recherche en overlay */
+.search-overlay .search {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    width: 90%;
+    max-width: 600px;
+}
+
+.search-overlay .search input {
+    padding: 1.5rem 2rem;
+    border: 3px solid var(--light);
+    border-radius: 50px;
+    width: 100%;
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--light);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.search-overlay .search input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.search-overlay .search input:focus {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: var(--hover-bg);
+    transform: scale(1.02);
+}
+
+.search-overlay .search button {
+    padding: 1rem 3rem;
+    background-color: var(--hover-bg);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    color: var(--light);
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.search-overlay .search button:hover {
+    background-color: var(--dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Bouton loupe pour ouvrir la recherche */
+.search-trigger {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.search-trigger:hover {
+    transform: scale(1.1);
+}
+
+.search-trigger ion-icon {
+    font-size: 25px;
+    color: var(--color-text);
+    transition: color 0.3s ease;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    padding: 0.5rem;
+}
+
+.search-trigger:hover ion-icon {
+    border: var(--dark);
+    background-color: var(--dark);
+    color: var(--other-color-text);
 }
 
 /* Style de la recherche mobile sous le logo */
@@ -223,7 +347,15 @@ nav:has(a:hover) a:not(:hover) {
     max-width: 400px;
     margin: 0 auto;
 }
-    
+
+.posts-filter .search {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
 .posts-filter .search input {
     padding: 0.5rem;
     border: 1px solid var(--underline);
@@ -250,7 +382,7 @@ nav:has(a:hover) a:not(:hover) {
     width: 20px;
     height: 20px;
     fill: var(--color-text);
-    transition: fill 0.3s ease;
+    transition: color 0.3s ease;
 }
 
 #btn-search:hover .ionicon {

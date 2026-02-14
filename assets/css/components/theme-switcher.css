@@ -1,33 +1,36 @@
-/* Container dans le footer */
+/* ================================
+   THEME SWITCHER - EN HAUT À GAUCHE
+   ================================ */
+
 .theme-switcher {
-    position: relative;
+    position: absolute;
+    top: 1rem;
+    left: 10%; /* Aligné avec le bord gauche du menu (80% centré) */
+    z-index: 100;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
 }
 
-/* Bouton principal */
+/* Bouton principal - CTA texte */
 .theme-toggle {
     background: var(--bg-color);
     border: 2px solid var(--border-color);
-    border-radius: 50%;
-    width: 45px;
-    height: 45px;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 14px;
+    font-weight: 500;
     color: var(--color-text);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     transition: all 0.3s ease;
+    white-space: nowrap;
 }
 
 .theme-toggle:hover {
-    transform: scale(1.1);
+    color: var(--other-color-text);
     background: var(--hover-bg);
 }
 
-/* Menu caché */
+/* Menu déroulant */
 .theme-menu {
     display: none;
     flex-direction: column;
@@ -35,42 +38,173 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     overflow: hidden;
     position: absolute;
-    bottom: 60px; /* Au-dessus du bouton */
-    min-width: 120px;
+    top: calc(100% + 8px);
+    left: 0;
+    min-width: 140px;
     background-color: var(--bg-color);
+    border: 2px solid var(--border-color);
 }
 
-/* Boutons thème */
+/* Boutons de thème */
 .theme-menu button {
-    background: var(--border-color);
+    background: var(--bg-color);
     border: none;
-    padding: 10px 16px;
-    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px 16px;
+    text-align: left;
     cursor: pointer;
-    color: var(--other-color-text);
+    color: var(--color-text);
     font-size: 14px;
     transition: background 0.2s ease;
 }
 
-.theme-menu button:hover {
-    background: var(--hover-color);
-    color: var(--color-text);
+.theme-menu button:last-child {
+    border-bottom: none;
 }
 
-/* Classe active */
+.theme-menu button:hover {
+    background: var(--hover-bg);
+    color: var(--other-color-text);
+}
+
+/* Classe active pour afficher le menu */
 .theme-menu.open {
     display: flex;
 }
 
-/* Responsive mobile */
-@media (max-width: 768px) {
-    .theme-toggle {
-        width: 40px;
-        height: 40px;
-        font-size: 16px;
+/* ================================
+   SOCIAL LINKS - À DROITE
+   ================================ */
+
+.social-links {
+    position: absolute;
+    top: 1rem;
+    right: 10%; /* Aligné avec le bord droit du menu (80% centré) */
+    z-index: 100;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.social-links a {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border: 2px solid var(--dark);
+    color: var(--color-text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease; /* Ajoute la transition */
+}
+
+.social-links a:hover {
+    background-color: var(--dark); /* Change seulement la couleur de la bordure */
+    color: var(--other-color-text);
+}
+
+/* ================================
+   AJUSTEMENTS
+   ================================ */
+
+/* Pas besoin de padding-top car plus de barre fixe */
+.blog {
+    padding-top: 0;
+}
+
+/* Hamburger en position normale */
+.menu-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 999;
+}
+
+/* ================================
+   RESPONSIVE MOBILE
+   ================================ */
+
+@media (max-width: 900px) {
+    /* Sur mobile, positionnement classique */
+    .theme-switcher {
+        position: absolute;
+        top: 1.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 200; 
     }
-    
+
+    .theme-toggle {
+        font-size: 13px;
+        padding: 0.4rem 0.8rem;
+    }
+
     .theme-menu {
-        bottom: 50px;
+        min-width: 150px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--bg-color);
+        z-index: 200; 
+    }
+
+    .theme-menu button {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+
+    .social-links {
+        position: absolute;
+        top: 5rem; /* Sous le bouton thème */
+        left: 50%;
+        gap: 1rem;
+        transform: translateX(-50%);
+        right: auto;
+        z-index: 100; 
+    }
+
+    .social-links a {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+
+    .site-header {
+        padding-top: 6rem; /* Espace pour thème switcher + social links */
+    }
+
+    .menu-toggle {
+        top: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .theme-switcher {
+        top: 1rem;
+    }
+
+    .theme-toggle {
+        font-size: 12px;
+        padding: 0.35rem 0.7rem;
+    }
+
+    .social-links {
+        top: 3rem;
+        gap: 1rem;
+    }
+
+    .social-links a {
+        width: 32px;
+        height: 32px;
+        font-size: 0.9rem;
+    }
+
+    .site-header {
+        padding-top: 5.5rem;
+    }
+
+    .menu-toggle {
+        top: 0.5rem;
+        right: 0.5rem;
     }
 }

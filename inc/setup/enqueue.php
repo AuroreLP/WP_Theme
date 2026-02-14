@@ -106,10 +106,19 @@ function turningpages_enqueue_scripts() {
         ]
     );
 
-     // JS pour le style des filtres
+    // JS pour le style des filtres
     wp_enqueue_script(
         'ui-filters',
         get_template_directory_uri() . '/assets/js/modules/ui-filters.js', 
+        array(),
+        '1.0', 
+        true
+    );
+
+    // JS pour le style des filtres
+    wp_enqueue_script(
+        'search-overlay',
+        get_template_directory_uri() . '/assets/js/modules/search-overlay.js', 
         array(),
         '1.0', 
         true
@@ -164,6 +173,18 @@ function add_type_module_to_ionicons($tag, $handle, $src) {
         $tag = '<script nomodule src="' . esc_url($src) . '"></script>' . "\n";
     }
     return $tag;
+}
+
+// Fonction pour passer les URLs des logos à JavaScript
+add_action('wp_enqueue_scripts', 'enqueue_theme_logos_data');
+function enqueue_theme_logos_data() {
+    $logos = array(
+        'theme-light' => get_option('logo_theme_light', get_template_directory_uri() . '/assets/images/logos/purple_logo.png'),
+        'theme-dark' => get_option('logo_theme_dark', get_template_directory_uri() . '/assets/images/logos/light_logo.png'),
+        'theme-green' => get_option('logo_theme_green', get_template_directory_uri() . '/assets/images/logos/green_logo.png'),
+    );
+    
+    wp_localize_script('theme-switcher', 'themeLogos', $logos);
 }
 
 /**

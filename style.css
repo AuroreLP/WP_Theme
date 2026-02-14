@@ -35,16 +35,17 @@ body {
 
 /* Couleurs par défaut : Light */
 :root {
-  --bg-color: #F6F4EB;
+  --bg-color: #f0ecff;
   --color-text: #4C436F;
 }
 
 /* Thème Light */
-body.theme-light {
-  --bg-color: #F6F4EB;
+html.theme-light,
+html.theme-light body {
+  --bg-color: #f0ecff;
   --other-bg-color: #4C436F;
   --color-text: #4C436F;
-  --other-color-text: #F6F4EB;
+  --other-color-text: #f0ecff;
   --border-color: #CBBEFA;
   --hover-bg: #9D8CDD;
   --light: #F0ECFF;
@@ -53,28 +54,30 @@ body.theme-light {
 }
 
 /* Thème Dark */
-body.theme-dark {
-  --bg-color: #4C436F;
-  --other-bg-color: #F6F4EB;
-  --color-text: #F6F4EB;
-  --other-color-text: #4C436F;
-  --hover-bg: #CBBEFA;
-  --border-color: #CBBEFA;
-  --light: #F0ECFF;
-  --dark: #6A59A7;
-  --grey: #d0cece;
+html.theme-dark,
+html.theme-dark body {
+  --bg-color: #423b5d;
+  --other-bg-color: #e2e2e4;
+  --color-text: #e2e2e4;
+  --other-color-text: #423b5d;
+  --hover-bg: #46a29e;
+  --border-color: #46a29e;
+  --light: #e2e2e4;
+  --dark: #46a29e;
+  --grey: #a9acb9;
 }
 
 /* Thème Beige */
-body.theme-beige {
+html.theme-green,
+html.theme-green body {
   --bg-color: #F6F4EB;
-  --other-bg-color: #2c1f20;
-  --color-text: #2c1f20;
+  --other-bg-color: #204745;
+  --color-text: #204745;
   --other-color-text: #F6F4EB;
-  --hover-bg: #8B6D53;
-  --border-color: #C2B59B;
+  --hover-bg: #46a29e;
+  --border-color: #46a29e;
   --light: #F6F4EB;
-  --dark: #8d7c69;
+  --dark: #46a29e;
   --grey: #757575;
 }
 
@@ -167,6 +170,7 @@ a:hover {
     width: 250px;
     max-width: 80%;
     aspect-ratio: 3 / 1;
+    margin-top: 1rem;
     margin-bottom: 0.5rem;
     display: block;
 }
@@ -191,7 +195,6 @@ a:hover {
     }
     
     .site-logo {
-        width: 200px;
         max-width: 80%;
         position: relative !important;
         z-index: 10 !important;
@@ -383,10 +386,13 @@ footer .social a {
     display: flex;
     justify-content: center;
     align-items: center;
+    border: 2px solid var(--dark);
+    color: var(--color-text);
 }
 
 footer .social a:hover {
-    background-color: var(--hover-bg);
+    background-color: var(--dark);
+    color: var(--other-color-text);
 }
 
 @media (max-width: 800px) {
