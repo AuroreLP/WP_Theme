@@ -21,38 +21,8 @@ while (have_posts()) : the_post(); ?>
                 </div>
             <?php endif; ?>
 
-            <?php
-            // =================
-            // SECTIONS EDITORIALES
-            // =================
-
-            $resume = get_post_meta(get_the_ID(), 'resume', true);
-            $avis = get_post_meta(get_the_ID(), 'avis', true);
-            $spoiler = get_post_meta(get_the_ID(), 'spoiler', true);
-            $conclusion = get_post_meta(get_the_ID(), 'conclusion', true);
-
-            if ($resume) :
-                get_template_part('inc/template-parts/chronique/section', 'resume');
-            endif;
-
-            if ($avis) :
-                get_template_part('inc/template-parts/chronique/section', 'avis');
-            endif;
-
-            if ($spoiler) :
-                get_template_part('inc/template-parts/chronique/section', 'spoiler');
-            endif;
-
-            if ($conclusion) :
-                get_template_part('inc/template-parts/chronique/section', 'conclusion');
-            endif;
-
-            // fallback si ancien contenu Gutenberg
-            if (!$resume && !$avis && !$spoiler && !$conclusion) :
-                the_content();
-            endif;
-            ?>
-
+             <?php the_content(); ?>
+            
         </div>
         <div class="chronique-image">
             

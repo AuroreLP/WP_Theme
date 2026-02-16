@@ -42,7 +42,7 @@
 
 /* Ajouter une icÃ´ne custom (flÃ¨che) */
 .wp-block-details summary::after {
-    content: "â–¼";
+    content: "▼";
     color: var(--color-text);
     position: absolute;
     right: 20px;
@@ -63,6 +63,7 @@
 /* Rotation de la flÃ¨che quand ouvert */
 .wp-block-details[open] summary::after {
     transform: translateY(-50%) rotate(180deg);
+    color: var(--other-color-text);
 }
 
 /* LE CONTENU (quand affichÃ©) */

@@ -57,7 +57,7 @@ function create_chroniques_post_type() {
             // Avis avec SPOILER
             array('core/heading', array(
                 'level' => 2, 
-                'content' => '⚠️ Avis avec SPOILER'
+                'content' => 'Avis avec SPOILER'
             )),
             array('core/details', array(
                 'summary' => 'Clique ici pour te faire spoiler',
