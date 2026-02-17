@@ -2,35 +2,34 @@
     <?php the_title(); ?><span><?php
         $post_id = get_the_ID();
 
-        // 1️⃣ Récupérer les artistes liés (relation Pods)
-        $artistes_lies = get_post_meta($post_id, 'artistes_lies', true);
+        // 1️⃣ Initialiser Pods + récupérer les artistes liés (relation Pods)
+        $pod = pods('chroniques', $post_id);
+        $artistes_lies = $pod->field('artistes_lies');
 
-        // 2️⃣ Récupérer le champ texte libre
-        $artiste_texte = get_post_meta($post_id, 'artistes_texte', true);
+        // 2️⃣ Récupérer le champ texte libre via Pods (pour gérer le répétable)
+        $artiste_texte = $pod->field('artistes_texte');
 
         if (!empty($artistes_lies)) {
 
             // Normalisation en tableau
-            if (is_string($artistes_lies)) {
-                if (strpos($artistes_lies, ',') !== false) {
-                    $artistes_ids = explode(',', $artistes_lies);
-                } else {
-                    $artistes_ids = array($artistes_lies);
-                }
-            } else {
-                $artistes_ids = (array) $artistes_lies;
+            if (!is_array($artistes_lies)) {
+                $artistes_lies = array($artistes_lies);
             }
 
             $artistes_noms = array();
 
-            foreach ($artistes_ids as $artiste_id) {
+            foreach ($artistes_lies as $artiste) {
 
-                $artiste_id = trim($artiste_id);
+                // Pods retourne un tableau avec ID et infos
+                if (is_array($artiste)) {
+                    $artiste_id = $artiste['ID'];
+                } else {
+                    $artiste_id = trim($artiste);
+                }
 
                 if (!empty($artiste_id)) {
                     $artiste_nom = get_the_title($artiste_id);
                     $artiste_url = get_permalink($artiste_id);
-
                     $artistes_noms[] = '<a href="' . esc_url($artiste_url) . '">' . esc_html($artiste_nom) . '</a>';
                 }
             }
@@ -41,8 +40,14 @@
 
         } elseif (!empty($artiste_texte)) {
 
-            // 🔹 Fallback texte libre (sans lien)
-            echo ' – ' . esc_html($artiste_texte);
+            // 🔹 Fallback texte libre - gestion de plusieurs noms
+            if (!is_array($artiste_texte)) {
+                $artiste_texte = array($artiste_texte);
+            }
+
+            $artiste_texte = array_map('trim', $artiste_texte);
+            echo ' – ' . esc_html(implode(', ', $artiste_texte));
         }
+
     ?></span>
 </h1>
