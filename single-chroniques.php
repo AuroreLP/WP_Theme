@@ -22,6 +22,8 @@ while (have_posts()) : the_post(); ?>
             <?php endif; ?>
 
              <?php the_content(); ?>
+             <?php get_template_part('inc/template-parts/chronique/spoiler'); ?>
+
             
         </div>
         <div class="chronique-image">

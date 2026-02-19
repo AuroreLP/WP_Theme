@@ -53,7 +53,7 @@ function create_chroniques_post_type() {
             array('core/paragraph', array(
                 'placeholder' => 'Écris ici tes impressions sur le livre...'
             )),
-            
+            /*
             // Avis avec SPOILER
             array('core/heading', array(
                 'level' => 2, 
@@ -66,9 +66,10 @@ function create_chroniques_post_type() {
                 array('core/paragraph', array(
                     'placeholder' => 'Écris ici ton avis détaillé avec spoilers...'
                 ))
-            )), // ← Correction ici : )), au lieu de ))
-        ), // ← Fermeture du tableau 'template'
-        'template_lock' => false, // Optionnel : permet de modifier la structure dans l'éditeur
+            )),
+            */
+        ), 
+        'template_lock' => false, // permet de modifier la structure dans l'éditeur
     ));
 }
 add_action('init', 'create_chroniques_post_type');
@@ -376,3 +377,43 @@ function chroniques_excerpt_counter_enqueue($hook) {
     );
 }
 add_action('admin_enqueue_scripts', 'chroniques_excerpt_counter_enqueue');
+
+// ===============================
+// 🗂 4. Meta Box Spoiler
+// ===============================
+function chroniques_add_spoiler_meta_box() {
+    add_meta_box(
+        'chroniques_spoiler',            // ID
+        'Avis avec SPOILER',             // Titre
+        'chroniques_spoiler_meta_box_html',  // Fonction d'affichage
+        'chroniques',                    // Post type
+        'normal',                        // Position
+        'default'                        // Priorité
+    );
+}
+add_action('add_meta_boxes', 'chroniques_add_spoiler_meta_box');
+
+function chroniques_spoiler_meta_box_html($post) {
+    wp_nonce_field('chroniques_spoiler_save', 'chroniques_spoiler_nonce');
+
+    $spoiler = get_post_meta($post->ID, '_chroniques_spoiler', true);
+
+    wp_editor($spoiler, 'chroniques_spoiler_editor', array(
+        'textarea_name' => 'chroniques_spoiler',
+        'media_buttons' => false,
+        'textarea_rows' => 8
+    ));
+}
+
+// Sauvegarde du spoiler
+function chroniques_save_spoiler($post_id) {
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+    if (!isset($_POST['chroniques_spoiler_nonce']) || 
+        !wp_verify_nonce($_POST['chroniques_spoiler_nonce'], 'chroniques_spoiler_save')) return;
+    if (!current_user_can('edit_post', $post_id)) return;
+
+    if (isset($_POST['chroniques_spoiler'])) {
+        update_post_meta($post_id, '_chroniques_spoiler', wp_kses_post($_POST['chroniques_spoiler']));
+    }
+}
+add_action('save_post', 'chroniques_save_spoiler');
