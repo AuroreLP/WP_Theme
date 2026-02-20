@@ -9,14 +9,14 @@ function turningpages_enqueue_styles() {
     
     // CSS modulaires (chargés sur toutes les pages)
     $css_files = array(
-        'navigation' => '/assets/css/components/navigation.css',
-        'components' => '/assets/css/components/components.css',
-        'spoilers' => '/assets/css/components/spoilers.css',
-        'posts' => '/assets/css/pages/posts.css',
-        'singles' => '/assets/css/layouts/singles.css',
-        'comments' => '/assets/css/components/comments.css',
-        'bilan' => '/assets/css/layouts/bilan.css',
-        'theme-switcher' => '/assets/css/components/theme-switcher.css'
+        'navigation' => 'assets/css/components/navigation.css',
+        'components' => 'assets/css/components/components.css',
+        'spoilers' => 'assets/css/components/spoilers.css',
+        'posts' => 'assets/css/pages/posts.css',
+        'singles' => 'assets/css/layouts/singles.css',
+        'comments' => 'assets/css/components/comments.css',
+        'bilan' => 'assets/css/layouts/bilan.css',
+        'theme-switcher' => 'assets/css/components/theme-switcher.css'
     );
     
     foreach ($css_files as $handle => $file) {
