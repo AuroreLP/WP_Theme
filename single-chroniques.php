@@ -23,6 +23,7 @@ while (have_posts()) : the_post(); ?>
 
              <?php the_content(); ?>
              <?php get_template_part('inc/template-parts/chronique/spoiler'); ?>
+             <?php get_template_part('inc/template-parts/chronique/sources'); ?>
 
             
         </div>

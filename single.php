@@ -41,6 +41,7 @@
                     </div>
                 <?php endif; ?>
                 <?php the_content() ;?>
+                <?php get_template_part('inc/template-parts/chronique/sources'); ?>
             </div>
             <div class="chronique-image">
                 <?php if (has_post_thumbnail()): ?>

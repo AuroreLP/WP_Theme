@@ -52,6 +52,7 @@ get_header();
                 <h2>Biographie</h2>
 
                 <?php the_content(); ?>
+                <?php get_template_part('inc/template-parts/chronique/sources'); ?>
 
             </div>
 

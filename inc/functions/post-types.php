@@ -12,7 +12,7 @@
  */
 
 // ===============================
-// 🧩 1. Custom Post Type : CHRONIQUES
+// 1. Custom Post Type : CHRONIQUES
 // ===============================
 function create_chroniques_post_type() {
     register_post_type('chroniques', array(
@@ -75,7 +75,7 @@ function create_chroniques_post_type() {
 add_action('init', 'create_chroniques_post_type');
 
 // ===============================
-// 🧭 2. Taxonomies Personnalisées
+// 2. Taxonomies Personnalisées
 // ===============================
 function create_chroniques_taxonomies() {
     // Auteur
@@ -157,7 +157,7 @@ function create_chroniques_taxonomies() {
 add_action('init', 'create_chroniques_taxonomies');
 
 // ===============================
-// 🗓️ 3. Champs Personnalisés (Meta Box)
+// 3. Champs Personnalisés (Meta Box)
 // ===============================
 function chroniques_add_meta_box() {
     add_meta_box(
@@ -379,7 +379,7 @@ function chroniques_excerpt_counter_enqueue($hook) {
 add_action('admin_enqueue_scripts', 'chroniques_excerpt_counter_enqueue');
 
 // ===============================
-// 🗂 4. Meta Box Spoiler
+// 4. Meta Box Spoiler
 // ===============================
 function chroniques_add_spoiler_meta_box() {
     add_meta_box(
@@ -397,12 +397,17 @@ function chroniques_spoiler_meta_box_html($post) {
     wp_nonce_field('chroniques_spoiler_save', 'chroniques_spoiler_nonce');
 
     $spoiler = get_post_meta($post->ID, '_chroniques_spoiler', true);
+    
+    // wp_editor($spoiler, 'chroniques_spoiler_editor', array(
+        // 'textarea_name' => 'chroniques_spoiler',
+        // 'media_buttons' => false,
+        // 'textarea_rows' => 8
+    // ));
+    
+    ?>
 
-    wp_editor($spoiler, 'chroniques_spoiler_editor', array(
-        'textarea_name' => 'chroniques_spoiler',
-        'media_buttons' => false,
-        'textarea_rows' => 8
-    ));
+    <textarea name="chroniques_spoiler" id="chroniques_spoiler" rows="8" style="width:100%;"><?php echo esc_textarea($spoiler); ?></textarea>
+    <?php
 }
 
 // Sauvegarde du spoiler
@@ -417,3 +422,42 @@ function chroniques_save_spoiler($post_id) {
     }
 }
 add_action('save_post', 'chroniques_save_spoiler');
+
+// ===============================
+// 5. Meta Box Sources
+// ===============================
+function add_sources_meta_box() {
+    $post_types = array('chroniques', 'post', 'artiste');
+    foreach ($post_types as $post_type) {
+        add_meta_box(
+            'sources_meta_box',
+            'Sources',
+            'sources_meta_box_html',
+            $post_type,
+            'normal',
+            'low'
+        );
+    }
+}
+add_action('add_meta_boxes', 'add_sources_meta_box');
+
+function sources_meta_box_html($post) {
+    wp_nonce_field('sources_meta_save', 'sources_meta_nonce');
+    $sources = get_post_meta($post->ID, '_post_sources', true);
+    ?>
+    <p><small>Une source par ligne. Ex : Antoine Chevrollier, interview Cineuropa (mai 2024)</small></p>
+    <textarea name="post_sources" id="post_sources" rows="6" style="width:100%;"><?php echo esc_textarea($sources); ?></textarea>
+    <?php
+}
+
+function save_sources_meta($post_id) {
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+    if (!isset($_POST['sources_meta_nonce']) || 
+        !wp_verify_nonce($_POST['sources_meta_nonce'], 'sources_meta_save')) return;
+    if (!current_user_can('edit_post', $post_id)) return;
+
+    if (isset($_POST['post_sources'])) {
+        update_post_meta($post_id, '_post_sources', wp_kses_post($_POST['post_sources']));
+    }
+}
+add_action('save_post', 'save_sources_meta');

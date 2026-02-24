@@ -147,6 +147,7 @@
     font-weight: 600;
 }
 
+
 @media (max-width: 768px) {
 
     .chronique-content,
@@ -201,4 +202,29 @@
     .chronique-image {
         margin-bottom: 1.5rem;
     }
+}
+
+/* ==========================================
+   SINGLES - Sources
+   ========================================== */
+.chronique-sources {
+    margin-top: 2rem;
+    padding-top: 1.5em;
+    border-top: 1px solid #ddd;
+    font-size: 0.7em;
+    color: #666;
+}
+
+.chronique-sources h4 {
+    margin-bottom: 0.5em;
+}
+
+.chronique-sources .sources-list {
+    list-style: decimal !important;
+    padding-left: 1.5em !important;
+}
+
+.chronique-sources .sources-list li {
+    list-style: decimal !important;
+    margin-bottom: 0.3em;
 }
