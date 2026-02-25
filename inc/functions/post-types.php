@@ -461,3 +461,14 @@ function save_sources_meta($post_id) {
     }
 }
 add_action('save_post', 'save_sources_meta');
+
+add_filter('register_post_type_args', 'change_artiste_rewrite_slug', 10, 2);
+function change_artiste_rewrite_slug($args, $post_type) {
+    if ($post_type === 'artiste') {
+        $args['rewrite'] = array(
+            'slug' => 'portrait',
+            'with_front' => false
+        );
+    }
+    return $args;
+}
