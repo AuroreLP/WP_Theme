@@ -2,12 +2,9 @@
     <?php the_title(); ?><span><?php
         $post_id = get_the_ID();
 
-        // 1️⃣ Initialiser Pods + récupérer les artistes liés (relation Pods)
+        // 1. Récupérer les artistes liés (relation Pods)
         $pod = pods('chroniques', $post_id);
         $artistes_lies = $pod->field('artistes_lies');
-
-        // 2️⃣ Récupérer le champ texte libre via Pods (pour gérer le répétable)
-        $artiste_texte = $pod->field('artistes_texte');
 
         if (!empty($artistes_lies)) {
 
@@ -19,8 +16,6 @@
             $artistes_noms = array();
 
             foreach ($artistes_lies as $artiste) {
-
-                // Pods retourne un tableau avec ID et infos
                 if (is_array($artiste)) {
                     $artiste_id = $artiste['ID'];
                 } else {
@@ -38,15 +33,16 @@
                 echo ' – ' . implode(', ', $artistes_noms);
             }
 
-        } elseif (!empty($artiste_texte)) {
+        } else {
 
-            // 🔹 Fallback texte libre - gestion de plusieurs noms
-            if (!is_array($artiste_texte)) {
-                $artiste_texte = array($artiste_texte);
+            // Fallback : taxonomie auteur (sans lien)
+            $auteur_terms = get_the_terms($post_id, 'auteur');
+            if (!empty($auteur_terms) && !is_wp_error($auteur_terms)) {
+                $auteur_noms = array_map(function($term) {
+                    return esc_html($term->name);
+                }, $auteur_terms);
+                echo ' – ' . implode(', ', $auteur_noms);
             }
-
-            $artiste_texte = array_map('trim', $artiste_texte);
-            echo ' – ' . esc_html(implode(', ', $artiste_texte));
         }
 
     ?></span>
