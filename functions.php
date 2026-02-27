@@ -7,7 +7,8 @@ require_once get_template_directory() . '/inc/setup/theme-support.php';
 require_once get_template_directory() . '/inc/setup/enqueue.php';
 require_once get_template_directory() . '/inc/setup/customizer.php';
 require_once get_template_directory() . '/inc/setup/security.php';
-require_once get_template_directory() . '/inc/functions/logo-manager.php'; 
+require_once get_template_directory() . '/inc/functions/logo-manager.php';
+require_once get_template_directory() . '/inc/functions/admin-dashboard.php'; 
 
 // Post types et taxonomies
 require_once get_template_directory() . '/inc/functions/post-types.php';
