@@ -166,24 +166,29 @@ function display_chronique_tags_inline() {
  * Rank Math — Variable personnalisée %chronique_auteur%
  * Récupère le nom de l'auteur depuis la taxonomy "auteur"
  */
-add_action('rank_math/vars/register_extra_replacements', function() {
+add_action('init', function() {
+    if (!function_exists('rank_math_register_var_replacement')) return;
+
     rank_math_register_var_replacement(
         'chronique_auteur',
         [
             'name'        => 'Auteur de la chronique',
-            'description' => 'Affiche le nom de l\'auteur depuis la taxonomy auteur',
+            'description' => 'Nom de l\'auteur depuis la taxonomy auteur',
             'variable'    => 'chronique_auteur',
-            'example'     => 'Stephen King',
+            'example'     => 'Nom de l\'auteur',
         ],
         function() {
-            global $post;
-            if (!$post || $post->post_type !== 'chroniques') return '';
-
-            $auteur_terms = get_the_terms($post->ID, 'auteur');
-            if (!empty($auteur_terms) && !is_wp_error($auteur_terms)) {
-                return implode(', ', wp_list_pluck($auteur_terms, 'name'));
+            $post_id = get_the_ID();
+            if (!$post_id) {
+                global $post;
+                if ($post) $post_id = $post->ID;
             }
+            if (!$post_id) return '';
 
+            $auteur_terms = get_the_terms($post_id, 'auteur');
+            if (!empty($auteur_terms) && !is_wp_error($auteur_terms)) {
+                return '— ' . implode(', ', wp_list_pluck($auteur_terms, 'name'));
+            }
             return '';
         }
     );
