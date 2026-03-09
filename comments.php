@@ -81,7 +81,7 @@ $count = absint( get_comments_number() );
             <div class="comment-reply-form" id="comment-reply-form-<?php echo $comment_id; ?>" style="display:none;">
                 <p>Vous répondez à <?php echo esc_html( $comment->comment_author ); ?></p>
                 <form action="<?php echo esc_url( site_url( '/wp-comments-post.php' ) ); ?>" method="POST" class="comment-form">
-                    <?php wp_nonce_field( 'comment_reply_' . $comment_id, 'comment_nonce' ); ?>
+                    <?php wp_nonce_field('comment_' . get_the_ID()); ?>
 
                     <label for="reply-author-<?php echo $comment_id; ?>">Nom<span class="required">*</span></label>
                     <input type="text" id="reply-author-<?php echo $comment_id; ?>" name="author" required>
@@ -146,7 +146,7 @@ $count = absint( get_comments_number() );
             Veuillez consulter la <a href="<?php echo esc_url( home_url( '/politique-de-confidentialite/' ) ); ?>">politique de confidentialité</a> pour en savoir plus.
         </p>
         <form action="<?php echo esc_url( site_url( '/wp-comments-post.php' ) ); ?>" method="POST" id="commentform" class="comment-form">
-            <?php wp_nonce_field( 'comment_main_' . get_the_ID(), 'comment_nonce' ); ?>
+            <?php wp_nonce_field('comment_' . get_the_ID()); ?>
 
             <label for="author">Nom<span class="required">*</span></label>
             <input type="text" id="author" name="author" required>
