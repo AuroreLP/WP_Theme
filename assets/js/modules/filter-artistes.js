@@ -1,62 +1,98 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const posts = [...document.querySelectorAll('.post-box.artiste')];
-    const pagination = document.querySelector('.pagination');
-    const filters = ['filter-role', 'filter-nation']
-        .map(id => document.getElementById(id));
+/**
+ * Filter & Pagination — Artistes (page-artistes.php)
+ *
+ * Client-side filtering by role and nationality, with pagination,
+ * for the artistes listing page.
+ *
+ * Filters:
+ * - #filter-role:   matches data-role (uses term NAME, not slug,
+ *                    to preserve point médian characters like "Auteur·ice")
+ * - #filter-nation: matches data-nation (uses slug)
+ *
+ * Pagination: 8 posts per page, generated dynamically.
+ *
+ * Pattern is identical to filter-chroniques.js — both could be
+ * refactored into a single configurable module in the future.
+ *
+ * @package turningpages
+ */
 
-    if (filters.includes(null) || !pagination) return;
+document.addEventListener( 'DOMContentLoaded', function () {
 
-    const postsPerPage = 8;
-    let currentPage = 1;
+    var posts      = Array.from( document.querySelectorAll( '.post-box.artiste' ) );
+    var pagination = document.querySelector( '.pagination' );
+    var filters    = [ 'filter-role', 'filter-nation' ]
+        .map( function ( id ) { return document.getElementById( id ); } );
 
-    const getFiltered = () => {
-        const [role, nation] = filters.map(f => f.value);
-        return posts.filter(post => {
-            const pRole = post.dataset.role;
-            const pNation = post.dataset.nation;
-
-            return (role === 'all' || pRole === role)
-                && (nation === 'all' || pNation === nation);
-        });
-    };
-
-    const showPosts = (items) => {
-        posts.forEach(p => p.style.display = 'none');
-        items.forEach(p => p.style.display = 'flex');
-    };
-
-    const paginate = (items) => {
-        pagination.innerHTML = '';
-        const totalPages = Math.ceil(items.length / postsPerPage);
-
-        [...Array(totalPages)].forEach((_, i) => {
-            const page = i + 1;
-            const li = document.createElement('li');
-            li.innerHTML = `<a href="#">${page}</a>`;
-            li.classList.toggle('active', page === currentPage);
-            
-            li.onclick = (e) => {
-                e.preventDefault();
-                currentPage = page;
-                apply();
-            };
-
-            pagination.appendChild(li);
-        });
-    };
-
-    function apply() {
-        const filtered = getFiltered();
-        const start = (currentPage - 1) * postsPerPage;
-        const visible = filtered.slice(start, start + postsPerPage);
-
-        paginate(filtered);
-        showPosts(visible);
+    // Bail if required elements are missing
+    if ( filters.indexOf( null ) !== -1 || ! pagination ) {
+        return;
     }
 
-    filters.forEach(f => f.onchange = () => {
-        currentPage = 1;
-        apply();
+    var postsPerPage = 8;
+    var currentPage  = 1;
+
+    /**
+     * Return posts matching all active filters.
+     * A post must pass every filter to be included (AND logic).
+     */
+    function getFiltered() {
+        var role   = filters[0].value;
+        var nation = filters[1].value;
+
+        return posts.filter( function ( post ) {
+            var pRole   = post.dataset.role;
+            var pNation = post.dataset.nation;
+
+            return ( role === 'all' || pRole === role )
+                && ( nation === 'all' || pNation === nation );
+        });
+    }
+
+    /** Hide all posts, then show only the given subset. */
+    function showPosts( items ) {
+        posts.forEach( function ( p ) { p.style.display = 'none'; } );
+        items.forEach( function ( p ) { p.style.display = 'flex'; } );
+    }
+
+    /** Generate pagination buttons for the filtered result set. */
+    function paginate( items ) {
+        pagination.innerHTML = '';
+        var totalPages = Math.ceil( items.length / postsPerPage );
+
+        for ( var i = 1; i <= totalPages; i++ ) {
+            ( function ( page ) {
+                var li = document.createElement( 'li' );
+                li.innerHTML = '<a href="#">' + page + '</a>';
+                if ( page === currentPage ) {
+                    li.classList.add( 'active' );
+                }
+                li.addEventListener( 'click', function ( e ) {
+                    e.preventDefault();
+                    currentPage = page;
+                    apply();
+                });
+                pagination.appendChild( li );
+            })( i );
+        }
+    }
+
+    /** Main render cycle: filter → paginate → display. */
+    function apply() {
+        var filtered = getFiltered();
+        var start    = ( currentPage - 1 ) * postsPerPage;
+        var visible  = filtered.slice( start, start + postsPerPage );
+
+        paginate( filtered );
+        showPosts( visible );
+    }
+
+    // ── Bind filters and initial render ──
+    filters.forEach( function ( f ) {
+        f.addEventListener( 'change', function () {
+            currentPage = 1;
+            apply();
+        });
     });
 
     apply();

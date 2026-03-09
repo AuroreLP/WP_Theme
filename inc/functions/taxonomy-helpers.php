@@ -1,197 +1,273 @@
 <?php
 /**
- * Fonctions helper pour afficher les taxonomies des chroniques et des articles
+ * Taxonomy Display Helpers
+ *
+ * Utility functions for rendering taxonomy terms in templates.
+ * Used primarily in chronique sidebars, article footers, and card components
+ * to display genres, themes, authors, nationalities, etc.
+ *
+ * Naming convention:
+ * - tp_get_*   → returns data (for logic, filters, JS)
+ * - tp_display_* → echoes HTML (for direct use in templates)
+ *
+ * @package turningpages
  */
 
+
+/* =========================================================================
+ * GENERIC TERM LIST RENDERER
+ * ========================================================================= */
+
 /**
- * Récupère le genre à afficher (sous-genre en priorité, sinon genre parent)
+ * Display terms of any taxonomy as an HTML <li> list with archive links.
+ *
+ * This is the core function that powers all the specific display functions
+ * below. Instead of repeating the same get_the_terms/foreach/echo pattern
+ * for every taxonomy, they all call this.
+ *
+ * @param string   $taxonomy  The taxonomy slug (e.g. 'genre', 'theme').
+ * @param int|null $post_id   Post ID. Defaults to current post in the loop.
  */
-function get_chronique_genre_display() {
-    $genres = get_the_terms(get_the_ID(), 'genre');
-    
-    if (!$genres || is_wp_error($genres)) {
+function tp_display_terms_list( $taxonomy, $post_id = null ) {
+    if ( ! $post_id ) {
+        $post_id = get_the_ID();
+    }
+
+    $terms = get_the_terms( $post_id, $taxonomy );
+    if ( ! $terms || is_wp_error( $terms ) ) {
+        return;
+    }
+
+    foreach ( $terms as $term ) {
+        echo '<li><a href="' . esc_url( get_term_link( $term ) ) . '">' . esc_html( $term->name ) . '</a></li>';
+    }
+}
+
+
+/* =========================================================================
+ * GENRE — Special handling (sub-genre priority)
+ * ========================================================================= */
+
+/**
+ * Get the most specific genre to display.
+ *
+ * Genre is a hierarchical taxonomy (parent/child). When both a parent
+ * genre (e.g. "Fiction") and a sub-genre (e.g. "Science-fiction") are
+ * assigned, we prefer the sub-genre for display. Falls back to the
+ * parent if no sub-genre exists.
+ *
+ * @return array|null  Array with 'name', 'slug', 'link', 'term' keys, or null.
+ */
+function tp_get_chronique_genre_display() {
+    $genres = get_the_terms( get_the_ID(), 'genre' );
+
+    if ( ! $genres || is_wp_error( $genres ) ) {
         return null;
     }
-    
+
     $genre_parent = null;
-    $sous_genre = null;
-    
-    foreach ($genres as $genre) {
-        if ($genre->parent == 0) {
+    $sous_genre   = null;
+
+    foreach ( $genres as $genre ) {
+        if ( $genre->parent == 0 ) {
             $genre_parent = $genre;
         } else {
             $sous_genre = $genre;
-            break; // on prend seulement le premier sous-genre trouvé
+            break; // Take the first sub-genre found
         }
     }
-    
-    $genre_to_display = $sous_genre ? $sous_genre : $genre_parent;
-    
-    if ($genre_to_display) {
+
+    $display = $sous_genre ? $sous_genre : $genre_parent;
+
+    if ( $display ) {
         return array(
-            'name' => $genre_to_display->name,
-            'slug' => $genre_to_display->slug,
-            'link' => get_term_link($genre_to_display),
-            'term' => $genre_to_display
+            'name' => $display->name,
+            'slug' => $display->slug,
+            'link' => get_term_link( $display ),
+            'term' => $display,
         );
     }
-    
+
     return null;
 }
 
 /**
- * Affiche les genres (sous-genres en priorité) en liste HTML avec liens vers archives
+ * Display genres as <li> list — sub-genres preferred, parent as fallback.
+ *
+ * Unlike the generic tp_display_terms_list(), this function applies the
+ * sub-genre priority logic: if sub-genres exist, only they are shown.
+ * If none, the parent genre is displayed instead.
  */
-function display_chronique_genres_list() {
-    $genres = get_the_terms(get_the_ID(), 'genre');
-    if (!$genres || is_wp_error($genres)) return;
-    
+function tp_display_chronique_genres_list() {
+    $genres = get_the_terms( get_the_ID(), 'genre' );
+    if ( ! $genres || is_wp_error( $genres ) ) {
+        return;
+    }
+
     $genre_parent = null;
-    $sous_genres = array();
-    
-    foreach ($genres as $genre) {
-        if ($genre->parent == 0) {
+    $sous_genres  = array();
+
+    foreach ( $genres as $genre ) {
+        if ( $genre->parent == 0 ) {
             $genre_parent = $genre;
         } else {
             $sous_genres[] = $genre;
         }
     }
-    
-    if (!empty($sous_genres)) {
-        foreach ($sous_genres as $sg) {
-            echo '<li><a href="' . esc_url(get_term_link($sg)) . '">' . esc_html($sg->name) . '</a></li>';
+
+    if ( ! empty( $sous_genres ) ) {
+        foreach ( $sous_genres as $sg ) {
+            echo '<li><a href="' . esc_url( get_term_link( $sg ) ) . '">' . esc_html( $sg->name ) . '</a></li>';
         }
-    } elseif ($genre_parent) {
-        echo '<li><a href="' . esc_url(get_term_link($genre_parent)) . '">' . esc_html($genre_parent->name) . '</a></li>';
+    } elseif ( $genre_parent ) {
+        echo '<li><a href="' . esc_url( get_term_link( $genre_parent ) ) . '">' . esc_html( $genre_parent->name ) . '</a></li>';
+    }
+}
+
+
+/* =========================================================================
+ * SPECIFIC TAXONOMY DISPLAY FUNCTIONS
+ *
+ * These are thin wrappers around tp_display_terms_list().
+ * They exist for readability in templates — calling
+ * tp_display_chronique_themes_list() is clearer than
+ * tp_display_terms_list('theme') when reading a sidebar file.
+ * ========================================================================= */
+
+/** Display themes as <li> list with archive links. */
+function tp_display_chronique_themes_list() {
+    tp_display_terms_list( 'theme' );
+}
+
+/** Display authors as <li> list with archive links. */
+function tp_display_chronique_auteurs_list() {
+    tp_display_terms_list( 'auteur' );
+}
+
+/** Display nationalities as <li> list with archive links. */
+function tp_display_chronique_nationalites_list() {
+    tp_display_terms_list( 'nationalite' );
+}
+
+/** Display roles as <li> list with archive links. */
+function tp_display_chronique_roles_list() {
+    tp_display_terms_list( 'role' );
+}
+
+
+/* =========================================================================
+ * TAG HELPERS
+ * ========================================================================= */
+
+/**
+ * Display post tags as <li> list with archive links.
+ *
+ * Uses get_the_tags() (WP core) instead of get_the_terms() because
+ * tags use the built-in 'post_tag' taxonomy with its own helper.
+ */
+function tp_display_chronique_tags_list() {
+    $tags = get_the_tags();
+    if ( ! $tags || is_wp_error( $tags ) ) {
+        return;
+    }
+
+    foreach ( $tags as $tag ) {
+        echo '<li><a href="' . esc_url( get_tag_link( $tag->term_id ) ) . '">' . esc_html( $tag->name ) . '</a></li>';
     }
 }
 
 /**
- * Affiche les thèmes en liste HTML avec liens vers archives
+ * Display tags as comma-separated inline links.
+ * Used in article footers where a list layout isn't appropriate.
  */
-function display_chronique_themes_list() {
-    $themes = get_the_terms(get_the_ID(), 'theme');
-    if (!$themes || is_wp_error($themes)) return;
-    
-    foreach ($themes as $theme) {
-        echo '<li><a href="' . esc_url(get_term_link($theme)) . '">' . esc_html($theme->name) . '</a></li>';
+function tp_display_chronique_tags_inline() {
+    $tags = get_the_tags();
+    if ( ! $tags || is_wp_error( $tags ) ) {
+        return;
     }
+
+    $tag_links = array();
+    foreach ( $tags as $tag ) {
+        $tag_links[] = '<a href="' . esc_url( get_tag_link( $tag->term_id ) ) . '">' . esc_html( $tag->name ) . '</a>';
+    }
+    echo implode( ', ', $tag_links );
 }
 
+
+/* =========================================================================
+ * DATA RETRIEVAL (for JS filters, card components, etc.)
+ * ========================================================================= */
+
 /**
- * Récupère les thèmes d'une chronique (pour filtres JS par ex.)
+ * Get themes for the current post.
+ *
+ * @return WP_Term[]|null  Array of term objects, or null if none.
  */
-function get_chronique_themes() {
-    $themes = get_the_terms(get_the_ID(), 'theme'); 
-    if (!$themes || is_wp_error($themes)) {
+function tp_get_chronique_themes() {
+    $themes = get_the_terms( get_the_ID(), 'theme' );
+    if ( ! $themes || is_wp_error( $themes ) ) {
         return null;
     }
     return $themes;
 }
 
 /**
- * Affiche les auteurs en liste HTML avec liens vers archives
+ * Get tags for the current post.
+ *
+ * @return WP_Term[]|null  Array of term objects, or null if none.
  */
-function display_chronique_auteurs_list() {
-    $auteurs = get_the_terms(get_the_ID(), 'auteur');
-    if (!$auteurs || is_wp_error($auteurs)) return;
-
-    foreach ($auteurs as $auteur) {
-        echo '<li><a href="' . esc_url(get_term_link($auteur)) . '">' . esc_html($auteur->name) . '</a></li>';
-    }
-}
-
-/**
- * Affiche les nationalités en liste HTML avec liens vers archives
- */
-function display_chronique_nationalites_list() {
-    $nationalites = get_the_terms(get_the_ID(), 'nationalite');
-    if (!$nationalites || is_wp_error($nationalites)) return;
-
-    foreach ($nationalites as $nation) {
-        echo '<li><a href="' . esc_url(get_term_link($nation)) . '">' . esc_html($nation->name) . '</a></li>';
-    }
-}
-
-/**
- * Affiche les rôle en liste HTML avec liens vers archives
- */
-function display_chronique_roles_list() {
-    $roles = get_the_terms(get_the_ID(), 'role');
-    if (!$roles || is_wp_error($roles)) return;
-
-    foreach ($roles as $role) {
-        echo '<li><a href="' . esc_url(get_term_link($role)) . '">' . esc_html($role->name) . '</a></li>';
-    }
-}
-
-/**
- * Affiche les tags en liste HTML avec liens vers archives
- */
-function display_chronique_tags_list() {
+function tp_get_chronique_tags() {
     $tags = get_the_tags();
-    if (!$tags || is_wp_error($tags)) return;
-
-    foreach ($tags as $tag) {
-        echo '<li><a href="' . esc_url(get_tag_link($tag->term_id)) . '">' . esc_html($tag->name) . '</a></li>';
-    }
-}
-
-/**
- * Récupère les tags d'une chronique (pour filtres JS par ex.)
- */
-function get_chronique_tags() {
-    $tags = get_the_tags();
-    if (!$tags || is_wp_error($tags)) {
+    if ( ! $tags || is_wp_error( $tags ) ) {
         return null;
     }
     return $tags;
 }
 
-/**
- * Affiche les tags en texte simple séparé par des virgules
- */
-function display_chronique_tags_inline() {
-    $tags = get_the_tags();
-    if (!$tags || is_wp_error($tags)) return;
-    
-    $tag_names = array();
-    foreach ($tags as $tag) {
-        $tag_names[] = '<a href="' . esc_url(get_tag_link($tag->term_id)) . '">' . esc_html($tag->name) . '</a>';
-    }
-    echo implode(', ', $tag_names);
-}
+
+/* =========================================================================
+ * RANK MATH — Custom SEO Variable
+ * ========================================================================= */
 
 /**
- * Rank Math — Variable personnalisée %chronique_auteur%
- * Récupère le nom de l'auteur depuis la taxonomy "auteur"
+ * Register a custom Rank Math variable: %chronique_auteur%
+ *
+ * This allows using %chronique_auteur% in Rank Math title/description
+ * templates for chroniques. It pulls the author name from the 'auteur'
+ * taxonomy and formats it as "— Author Name".
+ *
+ * Example Rank Math title pattern:
+ *   %title% %chronique_auteur% | %sitename%
+ *   → "Misery — Stephen King | L'Ivresse des Mots"
+ *
+ * Only registers if Rank Math is active (function_exists check).
  */
-add_action('init', function() {
-    if (!function_exists('rank_math_register_var_replacement')) return;
+add_action( 'init', 'tp_register_rankmath_author_variable' );
+function tp_register_rankmath_author_variable() {
+    if ( ! function_exists( 'rank_math_register_var_replacement' ) ) {
+        return;
+    }
 
     rank_math_register_var_replacement(
         'chronique_auteur',
-        [
+        array(
             'name'        => 'Auteur de la chronique',
-            'description' => 'Nom de l\'auteur depuis la taxonomy auteur',
+            'description' => "Nom de l'auteur depuis la taxonomy auteur",
             'variable'    => 'chronique_auteur',
-            'example'     => 'Nom de l\'auteur',
-        ],
-        function() {
+            'example'     => "Nom de l'auteur",
+        ),
+        function () {
             $post_id = get_the_ID();
-            if (!$post_id) {
-                global $post;
-                if ($post) $post_id = $post->ID;
+            if ( ! $post_id ) {
+                return '';
             }
-            if (!$post_id) return '';
 
-            $auteur_terms = get_the_terms($post_id, 'auteur');
-            if (!empty($auteur_terms) && !is_wp_error($auteur_terms)) {
-                return '— ' . implode(', ', wp_list_pluck($auteur_terms, 'name'));
+            $auteur_terms = get_the_terms( $post_id, 'auteur' );
+            if ( ! empty( $auteur_terms ) && ! is_wp_error( $auteur_terms ) ) {
+                return '— ' . implode( ', ', wp_list_pluck( $auteur_terms, 'name' ) );
             }
+
             return '';
         }
     );
-});
-
-?>
+}

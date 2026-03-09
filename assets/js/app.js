@@ -1,16 +1,23 @@
-// ####################
-// Navigation
-// ####################
+/**
+ * Main Application Script
+ *
+ * Handles global UI interactions that are needed on every page.
+ * Currently: mobile menu toggle for the posts filter navigation.
+ *
+ * @package turningpages
+ */
 
-jQuery(document).ready(function($){
-    // Menu mobile toggle
-    const menu_toggle = document.querySelector('.menu-toggle');
-    const menu = document.querySelector('.posts-filter ul');
+document.addEventListener( 'DOMContentLoaded', function () {
 
-    if(menu_toggle && menu){
-        menu_toggle.addEventListener('click', () => {
-            menu_toggle.classList.toggle('is-active');
-            menu.classList.toggle('is-active');
+    /* ── Mobile menu toggle ── */
+    const menuToggle = document.querySelector( '.menu-toggle' );
+    const menu       = document.querySelector( '.posts-filter ul' );
+
+    if ( menuToggle && menu ) {
+        menuToggle.addEventListener( 'click', function () {
+            menuToggle.classList.toggle( 'is-active' );
+            menu.classList.toggle( 'is-active' );
         });
     }
-})
+
+});

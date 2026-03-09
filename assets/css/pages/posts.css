@@ -23,6 +23,11 @@
     border-bottom: 2px solid var(--border-color);
 }
 
+@media (max-width: 768px) {
+    .container {
+        padding: 0;
+    }
+}
 /* ####################### */
 /* Post Grid - toutes tailles */
 /* ####################### */

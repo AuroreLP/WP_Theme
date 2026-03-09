@@ -1,73 +1,121 @@
-document.addEventListener('DOMContentLoaded', () => {
+/**
+ * Generic Pagination + Filtering
+ *
+ * Client-side pagination and optional filtering for listing pages.
+ * Used on the homepage (front-page.php) and generic archives where
+ * the dedicated filter scripts (filter-chroniques.js, filter-articles.js)
+ * are not loaded.
+ *
+ * How it works:
+ * 1. All posts are already in the DOM (loaded with posts_per_page = -1)
+ * 2. This script shows/hides posts based on the current page number
+ * 3. If filter <select> elements exist on the page, it also handles
+ *    filtering by data-* attributes before paginating
+ *
+ * NOTE: This script overlaps in functionality with filter-chroniques.js,
+ * filter-articles.js, and filter-artistes.js. Those page-specific scripts
+ * are loaded via elseif in enqueue.php, ensuring only one filter/pagination
+ * script runs per page.
+ *
+ * @package turningpages
+ */
 
-    // ======= CONFIG =======
-    const postsGrid = document.querySelector('.posts-grid');
-    const paginationContainer = document.querySelector('.pagination');
-    const postsPerPage = 8;
+document.addEventListener( 'DOMContentLoaded', function () {
 
-    if (!postsGrid || !paginationContainer) return;
+    // ── Config ──
+    var postsGrid           = document.querySelector( '.posts-grid' );
+    var paginationContainer = document.querySelector( '.pagination' );
+    var postsPerPage        = 8;
 
-    // Sélectionne uniquement les items visibles dans la grille
-    let posts = Array.from(postsGrid.children);
+    if ( ! postsGrid || ! paginationContainer ) {
+        return;
+    }
 
-    let currentPage = 1;
-    let filteredPosts = [...posts]; // pour appliquer les filtres
+    var posts         = Array.from( postsGrid.children );
+    var currentPage   = 1;
+    var filteredPosts = posts.slice(); // Working copy for filter results
 
-    // ======= FUNCTIONS =======
+    // ── Display: show only the posts for the current page ──
+    function displayPosts( postsToShow, page ) {
+        page = page || 1;
 
-    function displayPosts(postsToShow, page = 1) {
-        posts.forEach(p => p.style.display = 'none');
+        // Hide all posts first
+        posts.forEach( function ( p ) {
+            p.style.display = 'none';
+        });
 
-        const start = (page - 1) * postsPerPage;
-        const end = start + postsPerPage;
+        // Show only the slice for the requested page
+        var start = ( page - 1 ) * postsPerPage;
+        var end   = start + postsPerPage;
 
-        postsToShow.slice(start, end).forEach(p => {
+        postsToShow.slice( start, end ).forEach( function ( p ) {
             p.style.display = '';
         });
     }
 
-    function createPagination(postsToShow) {
+    // ── Pagination: render page number buttons ──
+    function createPagination( postsToShow ) {
         paginationContainer.innerHTML = '';
-        const totalPages = Math.ceil(postsToShow.length / postsPerPage);
+        var totalPages = Math.ceil( postsToShow.length / postsPerPage );
 
-        for (let i = 1; i <= totalPages; i++) {
-            const li = document.createElement('li');
-            li.innerHTML = `<a href="#">${i}</a>`;
-            if (i === currentPage) li.classList.add('active');
+        for ( var i = 1; i <= totalPages; i++ ) {
+            ( function ( page ) {
+                var li = document.createElement( 'li' );
+                li.innerHTML = '<a href="#">' + page + '</a>';
 
-            li.addEventListener('click', e => {
-                e.preventDefault();
-                currentPage = i;
-                displayPosts(postsToShow, currentPage);
+                if ( page === currentPage ) {
+                    li.classList.add( 'active' );
+                }
 
-                Array.from(paginationContainer.children).forEach(c => c.classList.remove('active'));
-                li.classList.add('active');
-            });
+                li.addEventListener( 'click', function ( e ) {
+                    e.preventDefault();
+                    currentPage = page;
+                    displayPosts( postsToShow, currentPage );
 
-            paginationContainer.appendChild(li);
+                    // Update active state on all pagination items
+                    Array.from( paginationContainer.children ).forEach( function ( child ) {
+                        child.classList.remove( 'active' );
+                    });
+                    li.classList.add( 'active' );
+                });
+
+                paginationContainer.appendChild( li );
+            })( i );
         }
     }
 
-    // ======= FILTERS =======
-    const filterElements = document.querySelectorAll('#filter-media, #filter-genre, #filter-theme, #filter-nation');
+    // ── Filters: listen to any filter <select> on the page ──
+    var filterElements = document.querySelectorAll(
+        '#filter-media, #filter-genre, #filter-theme, #filter-nation'
+    );
 
-    filterElements.forEach(select => {
-        select.addEventListener('change', () => {
-            // Appliquer les filtres sur les data-* de chaque post
-            filteredPosts = posts.filter(post => {
-                let show = true;
+    filterElements.forEach( function ( select ) {
+        select.addEventListener( 'change', function () {
 
-                filterElements.forEach(f => {
-                    const value = f.value;
-                    if (value === 'all') return;
+            /**
+             * Apply all active filters simultaneously.
+             * Each filter checks the corresponding data-* attribute
+             * on the post element (e.g. #filter-genre → data-genre).
+             * Themes can have multiple slugs (space-separated).
+             */
+            filteredPosts = posts.filter( function ( post ) {
+                var show = true;
 
-                    const dataAttr = f.id.replace('filter-', ''); // media, genre, theme, nation
-                    const postData = post.dataset[dataAttr]; // récupère data-media, data-genre, etc.
+                filterElements.forEach( function ( f ) {
+                    var value = f.value;
+                    if ( value === 'all' ) {
+                        return;
+                    }
 
-                    if (!postData) return;
+                    var dataAttr = f.id.replace( 'filter-', '' );
+                    var postData = post.dataset[ dataAttr ];
 
-                    // Plusieurs slugs possibles (thèmes)
-                    if (!postData.split(' ').includes(value)) {
+                    if ( ! postData ) {
+                        return;
+                    }
+
+                    // Split handles multiple slugs (e.g. data-theme="roman essai")
+                    if ( ! postData.split( ' ' ).includes( value ) ) {
                         show = false;
                     }
                 });
@@ -75,15 +123,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 return show;
             });
 
-            // reset page
             currentPage = 1;
-            displayPosts(filteredPosts, currentPage);
-            createPagination(filteredPosts);
+            displayPosts( filteredPosts, currentPage );
+            createPagination( filteredPosts );
         });
     });
 
-    // ======= INITIAL DISPLAY =======
-    displayPosts(filteredPosts, currentPage);
-    createPagination(filteredPosts);
-
+    // ── Initial render ──
+    displayPosts( filteredPosts, currentPage );
+    createPagination( filteredPosts );
 });

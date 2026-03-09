@@ -1,67 +1,40 @@
-<div class="book-info">
-    <?php
-// ---------- Récupération note ----------
-$note = get_post_meta(get_the_ID(), 'note_etoiles', true);
-$note = $note !== '' ? floatval($note) : 0;
-
-// On limite entre 0 et 5
-$note = max(0, min(5, $note));
-
-if ($note > 0) :
-
-    $note_full  = floor($note);
-    $note_half  = ($note - $note_full) >= 0.5 ? 1 : 0;
-    $note_empty = 5 - $note_full - $note_half;
+<?php
+/**
+ * Template Part — Sidebar: Film
+ *
+ * Displays metadata specific to film chroniques:
+ * - Star rating (via shared rating template part)
+ * - Release year
+ * - Duration (formatted as Xh00 via tp_format_duree)
+ *
+ * Used in: sidebar.php (via get_template_part, when media type is 'film')
+ *
+ * @package turningpages
+ */
 ?>
 
-    <div class="chronique-rating">
+<div class="book-info">
 
-        <?php
-        // Étoiles pleines
-        for ($i = 0; $i < $note_full; $i++) {
-            echo '<ion-icon name="star"></ion-icon>';
-        }
-
-        // Demi étoile
-        if ($note_half) {
-            echo '<ion-icon name="star-half"></ion-icon>';
-        }
-
-        // Étoiles vides
-        for ($i = 0; $i < $note_empty; $i++) {
-            echo '<ion-icon name="star-outline"></ion-icon>';
-        }
-        ?>
-
-        <span class="rating-value"><?php echo esc_html($note); ?>/5</span>
-
-    </div>
-
-<?php endif; ?>
-
+    <?php /* Star rating — shared component across all media sidebars */ ?>
+    <?php get_template_part( 'inc/template-parts/chronique/rating' ); ?>
 
     <?php
-    $date_sortie = get_post_meta(get_the_ID(), 'date_sortie', true);
-    $duree = (int) get_post_meta(get_the_ID(), 'duree', true);
+    $date_sortie = get_post_meta( get_the_ID(), 'date_sortie', true );
+    $duree       = (int) get_post_meta( get_the_ID(), 'duree', true );
     ?>
 
-    <?php if ($date_sortie): ?>
+    <?php if ( $date_sortie ) : ?>
         <p>
             <strong>Année de sortie :</strong>
-            <?php echo esc_html($date_sortie); ?>
+            <?php echo esc_html( $date_sortie ); ?>
         </p>
     <?php endif; ?>
 
-    <?php if ($duree > 0): ?>
-
+    <?php if ( $duree > 0 ) : ?>
         <p>
             <strong>Durée :</strong>
-            <?php echo esc_html(format_duree($duree)); ?>
+            <?php echo esc_html( tp_format_duree( $duree ) ); ?>
         </p>
-
     <?php endif; ?>
 
 </div>
-
-
-

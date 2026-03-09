@@ -1,22 +1,37 @@
-jQuery(document).ready(function($){
-    // Trouve le textarea de l'extrait
-    var $excerptField = $('#excerpt');
+/**
+ * Excerpt Character & Word Counter
+ *
+ * Adds a live counter below the excerpt textarea in the WordPress
+ * post editor, showing both word count and character count.
+ * Updates on every keystroke.
+ *
+ * jQuery is used here because the WordPress admin always loads jQuery,
+ * and this script only runs on admin post editing screens
+ * (post.php and post-new.php — see enqueue in post-types.php).
+ *
+ * @package turningpages
+ */
 
-    if(!$excerptField.length) return;
+jQuery( document ).ready( function ( $ ) {
 
-    // Crée un compteur sous le textarea
-    var $counter = $('<div id="excerpt-counter" style="margin-top:5px;font-size:0.9em;color:#555;"></div>');
-    $excerptField.after($counter);
-
-    function updateCounter() {
-        var text = $excerptField.val();
-        var wordCount = text.trim().split(/\s+/).filter(Boolean).length;
-        var charCount = text.length;
-
-        $counter.text('Mots: ' + wordCount + ' | Caractères: ' + charCount);
+    var $excerptField = $( '#excerpt' );
+    if ( ! $excerptField.length ) {
+        return;
     }
 
-    // Met à jour le compteur à l'ouverture et à chaque frappe
+    // Insert counter element below the textarea
+    var $counter = $( '<div id="excerpt-counter" style="margin-top:5px; font-size:0.9em; color:#555;"></div>' );
+    $excerptField.after( $counter );
+
+    function updateCounter() {
+        var text      = $excerptField.val();
+        var wordCount = text.trim().split( /\s+/ ).filter( Boolean ).length;
+        var charCount = text.length;
+
+        $counter.text( 'Mots: ' + wordCount + ' | Caractères: ' + charCount );
+    }
+
+    // Initial count + live updates
     updateCounter();
-    $excerptField.on('input', updateCounter);
+    $excerptField.on( 'input', updateCounter );
 });

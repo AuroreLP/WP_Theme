@@ -1,7 +1,17 @@
 <?php
 /**
- * Template pour afficher les articles par tag
+ * Tag Archive Template
+ *
+ * Displays all standard posts (articles) assigned to a specific tag.
+ * Uses the main WordPress query (no custom WP_Query needed) since
+ * tag archives are handled natively by WordPress.
+ *
+ * Pagination is handled client-side by pagination.js, which is
+ * enqueued conditionally on archive pages in enqueue.php.
+ *
+ * @package turningpages
  */
+
 get_header();
 
 $term = get_queried_object();
@@ -9,38 +19,36 @@ $term = get_queried_object();
 
 <main class="content">
     <div class="archive-header">
-        <h1>Étiquette : <?php echo esc_html($term->name); ?></h1>
+        <h1>Étiquette : <?php echo esc_html( $term->name ); ?></h1>
         <hr>
     </div>
 
     <div class="container">
         <div class="posts-grid">
-            <?php if (have_posts()) : ?>
-                <?php while (have_posts()) : the_post(); 
+            <?php if ( have_posts() ) : ?>
+                <?php while ( have_posts() ) : the_post();
 
-                    // Récupérer la catégorie principale
-                    $categories = get_the_category();
+                    $categories    = get_the_category();
                     $category_slug = '';
                     $category_name = '';
-                    if ($categories && !is_wp_error($categories)) {
+                    if ( $categories && ! is_wp_error( $categories ) ) {
                         $category_slug = $categories[0]->slug;
                         $category_name = $categories[0]->name;
                     }
 
-                    // Appel du template part
-                    get_template_part('inc/template-parts/components/cards', 'article', [
+                    get_template_part( 'inc/template-parts/components/cards', 'article', array(
                         'category_slug' => $category_slug,
                         'category_name' => $category_name,
-                    ]);
+                    ) );
 
                 endwhile; ?>
             <?php else : ?>
-                <p><?php echo esc_html('Aucun article trouvé pour cette étiquette.'); ?></p>
+                <p>Aucun article trouvé pour cette étiquette.</p>
             <?php endif; ?>
         </div>
     </div>
 
-    <!-- ===== PAGINATION ===== -->
+    <?php /* Pagination — populated by pagination.js */ ?>
     <nav class="nav-pagination">
         <ul class="pagination"></ul>
     </nav>
