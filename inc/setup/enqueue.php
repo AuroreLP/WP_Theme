@@ -213,20 +213,17 @@ function turningpages_enqueue_scripts() {
     wp_localize_script( 'theme-switcher', 'themeLogos', $logos );
 
     /**
-     * Force jQuery on pages where Contact Form 7 is present.
-     *
-     * The "Contact Form Entries" (CFDB7) plugin injects an inline script
-     * that depends on jQuery but doesn't declare it as a WP dependency.
-     * Without this, jQuery is not loaded (since our theme doesn't need it)
-     * and CFDB7's inline script throws "jQuery is not defined".
-     *
-     * This only loads jQuery on pages that actually contain a CF7 shortcode,
-     * keeping other pages jQuery-free.
-     */
-    global $post;
-    if ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'contact-form-7' ) ) {
+    * Force jQuery on pages where Contact Form 7 is present.
+    *
+    * The "Contact Form Entries" (CFDB7) plugin and hCaptcha inject
+    * inline scripts that depend on jQuery. Since the theme doesn't
+    * load jQuery by default, we force it on the contact page where
+    * the CF7 form lives.
+    */
+    if ( is_page( 'contact' ) ) {
         wp_enqueue_script( 'jquery' );
     }
+
 
     /** UI filter dropdowns */
     wp_enqueue_script(
