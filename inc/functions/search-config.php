@@ -65,7 +65,7 @@ function tp_extend_search_with_taxonomies( $query ) {
         global $wpdb;
         $like = '%' . $wpdb->esc_like( $search_term ) . '%';
         $where .= $wpdb->prepare(
-            " OR (tt.taxonomy IN ('type_media','role','nationalite','genre','theme','category','post_tag') AND t.name LIKE %s)",
+            " OR ({$wpdb->posts}.post_status = 'publish' AND tt.taxonomy IN ('type_media','role','nationalite','genre','theme','category','post_tag') AND t.name LIKE %s)",
             $like
         );
         return $where;
