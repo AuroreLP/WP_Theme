@@ -45,16 +45,18 @@ add_action( 'wp_enqueue_scripts', 'turningpages_enqueue_styles' );
 function turningpages_enqueue_styles() {
 
     /**
-     * Google Fonts — Montserrat (headings) + Cardo (body/serif).
+     * Self-hosted fonts — Montserrat (headings) + Cardo (body/serif).
      *
-     * Version is null to prevent ?ver= which would break CDN caching.
-     * display=swap keeps text visible while fonts load (LCP-friendly).
+     * Font files are served locally from assets/fonts/ to avoid
+     * sending visitor IPs to Google (RGPD compliance).
+     * font-display: swap is set in the @font-face declarations
+     * in fonts.css to keep text visible while fonts load.
      */
     wp_enqueue_style(
-        'google-fonts',
-        'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Cardo:ital,wght@0,400;0,700;1,400&display=swap',
+        'turningpages-fonts',
+        get_template_directory_uri() . '/assets/css/base/fonts.css',
         array(),
-        null
+        tp_asset_version( 'assets/css/base/fonts.css' )
     );
 
     /**
@@ -64,7 +66,7 @@ function turningpages_enqueue_styles() {
     wp_enqueue_style(
         'turningpages-style',
         get_stylesheet_uri(),
-        array(),
+        array('turningpages-fonts'),
         tp_asset_version( 'style.css' )
     );
 

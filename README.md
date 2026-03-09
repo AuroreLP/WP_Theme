@@ -125,12 +125,12 @@ TurningPages/                    # The blog was originally named this way
 | **UpdraftPlus** | Backups |
 | **PublishPress Planner** | Editorial calendar |
 | **Anti-Spam Bee** | Comment spam filtering |
+| **Koko Analytics** | Privacy-friendly site analytics (cookieless, self-hosted) |
 
 ### External Dependencies
 
 | Library | Loaded from | Used for |
 |---------|------------|----------|
-| Google Fonts (Montserrat, Cardo) | Google CDN | Typography |
 | Ionicons 7.1 | unpkg.com | UI icons (ES module + nomodule fallback) |
 | Chart.js 4.4 | jsDelivr | Bilan report charts (conditional) |
 
@@ -141,7 +141,8 @@ TurningPages/                    # The blog was originally named this way
 - **`filemtime()` cache busting** — All theme assets use file modification time as their version string via the `tp_asset_version()` helper. Browser caches are automatically invalidated when files change.
 - **Function prefixing** — All theme functions use the `tp_` prefix to avoid namespace collisions with plugins.
 - **`<section class="blog">` wrapper** — Opened in `header.php`, closed in `footer.php`. All page content sits inside this wrapper. The CSS layout depends on this structure.
-
+- **Self-hosted fonts** — Montserrat and Cardo are served locally from `assets/fonts/` instead of Google Fonts CDN, avoiding sending visitor IPs to Google (GDPR compliance) and eliminating an external DNS lookup.
+- **Self-hosted analytics** — Koko Analytics runs entirely on the server with no cookies and no external services, ensuring GDPR compliance without requiring a consent banner.
 
 ## Filtering & Pagination
 
