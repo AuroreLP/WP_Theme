@@ -61,7 +61,12 @@ function turningpages_enqueue_styles() {
      * Main stylesheet (style.css at theme root).
      * Contains CSS variables, reset, and global rules.
      */
-    wp_enqueue_style( 'turningpages-style', get_stylesheet_uri() );
+    wp_enqueue_style(
+        'turningpages-style',
+        get_stylesheet_uri(),
+        array(),
+        tp_asset_version( 'style.css' )
+    );
 
     /**
      * Modular CSS — loaded on every page.
