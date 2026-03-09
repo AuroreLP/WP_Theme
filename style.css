@@ -60,10 +60,10 @@ html.theme-dark body {
   --other-bg-color: #e2e2e4;
   --color-text: #e2e2e4;
   --other-color-text: #423b5d;
-  --hover-bg: #46a29e;
-  --border-color: #46a29e;
+  --hover-bg: #CBBEFA;
+  --border-color: #CBBEFA;
   --light: #e2e2e4;
-  --dark: #46a29e;
+  --dark: #CBBEFA;
   --grey: #a9acb9;
 }
 
