@@ -92,6 +92,8 @@ $count = absint( get_comments_number() );
                     <label for="reply-comment-<?php echo $comment_id; ?>">Commentaire<span class="required">*</span></label>
                     <textarea name="comment" id="reply-comment-<?php echo $comment_id; ?>" required></textarea>
 
+                    <?php do_action('comment_form_field_comment'); ?>
+
                     <input type="submit" value="Commenter" class="btn" name="submit">
                     <input type="hidden" name="comment_post_ID" value="<?php echo esc_attr( get_the_ID() ); ?>">
                     <input type="hidden" name="comment_parent" value="<?php echo $comment_id; ?>">
@@ -156,6 +158,8 @@ $count = absint( get_comments_number() );
 
             <label for="comment">Commentaire<span class="required">*</span></label>
             <textarea name="comment" id="comment" required></textarea>
+
+            <?php do_action('comment_form_field_comment'); ?>
 
             <input type="submit" value="Commenter" class="btn" name="submit" id="submit">
             <input type="hidden" name="comment_post_ID" value="<?php echo esc_attr( get_the_ID() ); ?>" id="comment_post_ID">
