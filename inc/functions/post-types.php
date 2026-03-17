@@ -57,7 +57,7 @@ function tp_register_chroniques_cpt() {
         'public'        => true,
         'has_archive'   => false,
         'menu_position' => 5,
-        'rewrite'       => array( 'slug' => 'chroniques' ),
+        'rewrite' => array( 'slug' => 'chroniques', 'with_front' => false ),
         'menu_icon'     => 'dashicons-edit-page',
         'show_in_rest'  => true,
         'supports'      => array( 'title', 'editor', 'thumbnail', 'excerpt', 'comments' ),
