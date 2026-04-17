@@ -28,8 +28,10 @@ get_header();
 <?php if ( have_posts() ) :
     while ( have_posts() ) : the_post();
 
-        $categories = get_the_category();
-        $tags       = get_the_tags();
+        $categories   = get_the_category();
+        $tags         = get_the_tags();
+        $themes       = get_the_terms( get_the_ID(), 'theme' );
+        $nationalites = get_the_terms( get_the_ID(), 'nationalite' );
     ?>
 
     <article>
@@ -57,6 +59,34 @@ get_header();
                             <li>
                                 <a href="<?php echo esc_url( get_tag_link( $tag->term_id ) ); ?>">
                                     <?php echo esc_html( $tag->name ); ?>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
+
+            <?php if ( $themes && ! is_wp_error( $themes ) ) : ?>
+                <div class="article-themes">
+                    <ul>
+                        <?php foreach ( $themes as $theme ) : ?>
+                            <li>
+                                <a href="<?php echo esc_url( get_term_link( $theme ) ); ?>">
+                                    <?php echo esc_html( $theme->name ); ?>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
+
+            <?php if ( $nationalites && ! is_wp_error( $nationalites ) ) : ?>
+                <div class="article-nationalites">
+                    <ul>
+                        <?php foreach ( $nationalites as $nationalite ) : ?>
+                            <li>
+                                <a href="<?php echo esc_url( get_term_link( $nationalite ) ); ?>">
+                                    <?php echo esc_html( $nationalite->name ); ?>
                                 </a>
                             </li>
                         <?php endforeach; ?>

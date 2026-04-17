@@ -84,8 +84,10 @@
     font-weight: 600;
 }
 
-/* Styles des tags */
-.article-tags ul {
+/* Styles des tags, thèmes et nationalités */
+.article-tags ul,
+.article-themes ul,
+.article-nationalites ul {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
@@ -95,14 +97,18 @@
 }
 
 
-.article-tags li {
+.article-tags li,
+.article-themes li,
+.article-nationalites li {
     margin: 0;
     padding: 0;
 }
 
-/* Liens de tags */
+/* Liens de tags, thèmes et nationalités */
 
-.article-tags a {
+.article-tags a,
+.article-themes a,
+.article-nationalites a {
     color: var(--color-text);
     border-radius: 0.5rem;
     padding: 0.2rem 0.3rem;
@@ -111,14 +117,18 @@
     text-decoration: none;
 }
 
-.article-tags a:hover {
+.article-tags a:hover,
+.article-themes a:hover,
+.article-nationalites a:hover {
     background-color: var(--hover-bg);
     color: var(--other-color-text);
     font-weight: 600;
 }
 
 @media (max-width: 1024px) {
-    .article-tags {
+    .article-tags,
+    .article-themes,
+    .article-nationalites {
         display: flex;
         flex-direction:column;
         margin-top: 0.5rem;
@@ -128,16 +138,22 @@
 }
 
 @media (max-width: 768px) {
-    .article-tags {
+    .article-tags,
+    .article-themes,
+    .article-nationalites {
         display: flex;
         justify-content: center;
     }
-    
-    .article-tags ul {
-        justify-content: center; 
+
+    .article-tags ul,
+    .article-themes ul,
+    .article-nationalites ul {
+        justify-content: center;
     }
 
-    .article-tags ul li {
+    .article-tags ul li,
+    .article-themes ul li,
+    .article-nationalites ul li {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -146,15 +162,19 @@
 }
 
 @media (max-width: 450px) {
-    .article-tags {
+    .article-tags,
+    .article-themes,
+    .article-nationalites {
         display: flex;
         flex-direction: column;
-        align-items: center; 
+        align-items: center;
         justify-content: center;
         margin: 1rem 0;
     }
 
-    .article-tags li {
+    .article-tags li,
+    .article-themes li,
+    .article-nationalites li {
         margin: 0;
     }
 }
