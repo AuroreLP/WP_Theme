@@ -26,25 +26,34 @@ $term = get_queried_object();
             <div class="posts-grid">
                 <?php while ( have_posts() ) : the_post();
 
-                    $genre_info      = tp_get_chronique_genre_display();
-                    $term_genre      = $genre_info['term'] ?? null;
-                    $genre_principal = ( $term_genre && $term_genre->parent ) ? get_term( $term_genre->parent, 'genre' ) : $term_genre;
+                    if ( get_post_type() === 'post' ) {
+                        $categories = get_the_category();
+                        $category   = $categories ? $categories[0] : null;
+                        get_template_part( 'inc/template-parts/components/cards', 'article', array(
+                            'category_slug' => $category ? $category->slug : '',
+                            'category_name' => $category ? $category->name : '',
+                        ) );
+                    } else {
+                        $genre_info      = tp_get_chronique_genre_display();
+                        $term_genre      = $genre_info['term'] ?? null;
+                        $genre_principal = ( $term_genre && $term_genre->parent ) ? get_term( $term_genre->parent, 'genre' ) : $term_genre;
 
-                    $chronique_themes = tp_get_chronique_themes();
-                    $themes_slugs     = $chronique_themes ? wp_list_pluck( $chronique_themes, 'slug' ) : array();
+                        $chronique_themes = tp_get_chronique_themes();
+                        $themes_slugs     = $chronique_themes ? wp_list_pluck( $chronique_themes, 'slug' ) : array();
 
-                    $nations_terms = get_the_terms( get_the_ID(), 'nationalite' );
-                    $nation_slug   = ( $nations_terms && ! is_wp_error( $nations_terms ) ) ? $nations_terms[0]->slug : '';
+                        $nations_terms = get_the_terms( get_the_ID(), 'nationalite' );
+                        $nation_slug   = ( $nations_terms && ! is_wp_error( $nations_terms ) ) ? $nations_terms[0]->slug : '';
 
-                    $media_terms = get_the_terms( get_the_ID(), 'type_media' );
-                    $media_slug  = ( $media_terms && ! is_wp_error( $media_terms ) ) ? $media_terms[0]->slug : '';
+                        $media_terms = get_the_terms( get_the_ID(), 'type_media' );
+                        $media_slug  = ( $media_terms && ! is_wp_error( $media_terms ) ) ? $media_terms[0]->slug : '';
 
-                    get_template_part( 'inc/template-parts/components/cards', 'chronique', array(
-                        'genre'  => $genre_principal ? $genre_principal->slug : '',
-                        'themes' => implode( ' ', $themes_slugs ),
-                        'nation' => $nation_slug,
-                        'media'  => $media_slug,
-                    ) );
+                        get_template_part( 'inc/template-parts/components/cards', 'chronique', array(
+                            'genre'  => $genre_principal ? $genre_principal->slug : '',
+                            'themes' => implode( ' ', $themes_slugs ),
+                            'nation' => $nation_slug,
+                            'media'  => $media_slug,
+                        ) );
+                    }
 
                 endwhile; ?>
             </div>
