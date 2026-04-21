@@ -233,6 +233,20 @@ blockquote p {
 }
 
 /* ####################### */
+/* Callout personnalisé */
+/* ####################### */
+
+.callout-lecture {
+  border-left: 4px solid var(--dark);
+  background-color: var(--border-color);
+  padding: 1rem 1.25rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  margin: 2rem 0;
+}
+
+
+/* ####################### */
 /* Section: autres chroniques */
 /* ####################### */
 
