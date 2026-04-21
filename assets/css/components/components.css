@@ -238,9 +238,9 @@ blockquote p {
 
 .callout-lecture {
   border-left: 4px solid var(--dark);
-  background-color: var(--border-color);
+  background-color: #cfc4f4;
   padding: 1rem 1.25rem;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 0.95rem;
   margin: 2rem 0;
 }
