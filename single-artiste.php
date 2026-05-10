@@ -64,6 +64,8 @@ get_header();
             </div>
 
             <div class="chronique-image">
+                <?php get_template_part( 'inc/template-parts/components/share-buttons' ); ?>
+
                 <?php if ( has_post_thumbnail() ) : ?>
                     <?php the_post_thumbnail( 'medium', array(
                         'alt' => esc_attr( get_the_title() ),

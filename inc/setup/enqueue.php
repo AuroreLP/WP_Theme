@@ -274,6 +274,16 @@ function turningpages_enqueue_scripts() {
         );
     }
 
+    if ( is_singular( array( 'post', 'chroniques', 'artiste' ) ) ) {
+        wp_enqueue_script(
+            'share-buttons',
+            get_template_directory_uri() . '/assets/js/modules/share-buttons.js',
+            array(),
+            tp_asset_version( 'assets/js/modules/share-buttons.js' ),
+            true
+        );
+    }
+
     /**
      * Conditional page-specific filter/pagination scripts.
      *
