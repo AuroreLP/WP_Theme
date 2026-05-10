@@ -219,6 +219,9 @@
 
 .share-buttons {
     margin-top: 1.5rem;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
     display: flex;
     flex-direction: column;
     align-items: center;
