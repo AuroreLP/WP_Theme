@@ -71,6 +71,7 @@ body.liens-body {
     text-transform: uppercase;
     color: var(--grey);
     margin-bottom: 0.6rem;
+    margin-top: 1rem;
 }
 
 /* ── À propos card ── */

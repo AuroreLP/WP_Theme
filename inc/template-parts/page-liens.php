@@ -174,11 +174,4 @@ $newsletter_url = get_theme_mod( 'newsletter_url' );
         S'abonner à la newsletter
     </a>
     <?php endif; ?>
-
-    <p class="liens-footer-link">
-        <a href="<?php echo esc_url( home_url( '/' ) ); ?>">
-            <?php echo esc_html( get_bloginfo( 'name' ) ); ?>
-        </a>
-    </p>
-
 </div>
