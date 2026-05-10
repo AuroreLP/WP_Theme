@@ -46,7 +46,7 @@ body.liens-body {
 
 .liens-title {
     font-size: clamp(1.5rem, 5vw, 1.9rem);
-    font-weight: 700;
+    font-weight: 600;
     color: var(--color-text);
     line-height: 1.2;
     margin: 0;
