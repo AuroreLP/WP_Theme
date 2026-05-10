@@ -47,6 +47,18 @@ function tp_customize_register( $wp_customize ) {
             'mod'   => 'mastodon_url',
             'label' => 'URL Mastodon',
         ),
+        array(
+            'mod'   => 'bluesky_url',
+            'label' => 'URL Bluesky',
+        ),
+        array(
+            'mod'   => 'threads_url',
+            'label' => 'URL Threads',
+        ),
+        array(
+            'mod'   => 'newsletter_url',
+            'label' => 'URL Newsletter (page liens)',
+        ),
     );
 
     foreach ( $social_networks as $network ) {

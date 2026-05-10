@@ -104,6 +104,11 @@
     color: var(--other-color-text);
 }
 
+.social-links .social-link-svg svg {
+    width: 20px;
+    height: 20px;
+}
+
 /* ================================
    AJUSTEMENTS
    ================================ */

@@ -1,0 +1,245 @@
+/* ==========================================
+   PAGE LIENS — Linktree-style bio page
+   ========================================== */
+
+/* ── Body: centred column ── */
+body.liens-body {
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2.5rem 1.25rem 4rem;
+    background-color: var(--bg-color);
+}
+
+/* ── Main wrapper ── */
+.liens-wrapper {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.875rem;
+}
+
+/* ── Header: logo + title + tagline ── */
+.liens-header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    padding-bottom: 0.5rem;
+}
+
+.liens-logo-link {
+    display: inline-block;
+    text-decoration: none;
+}
+
+.liens-logo {
+    width: 110px;
+    height: auto;
+    margin-bottom: 0.5rem;
+}
+
+.liens-title {
+    font-size: clamp(1.5rem, 5vw, 1.9rem);
+    font-weight: 700;
+    color: var(--color-text);
+    line-height: 1.2;
+    margin: 0;
+    text-decoration: none;
+}
+
+.liens-tagline {
+    font-style: italic;
+    color: var(--grey);
+    font-size: clamp(0.82rem, 3vw, 0.92rem);
+    line-height: 1.4;
+    text-align: center;
+    max-width: 36ch;
+}
+
+/* ── Section label (small uppercase heading) ── */
+.liens-label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin-bottom: 0.6rem;
+}
+
+/* ── À propos card ── */
+.liens-about-card {
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+}
+
+.liens-about-text p {
+    font-size: 0.9rem;
+    line-height: 1.55;
+    text-align: left;
+    color: var(--color-text);
+    margin: 0;
+}
+
+/* ── "Découvrir le blog" CTA ── */
+.liens-cta-discover {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 0.9rem 1.5rem;
+    background: var(--other-bg-color);
+    color: var(--other-color-text);
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.liens-cta-discover:hover {
+    opacity: 0.85;
+    color: var(--other-color-text);
+}
+
+/* ── Recent articles ── */
+.liens-articles {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.liens-article-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.8rem 1.1rem 0.8rem 1.25rem;
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--border-color);
+    border-radius: 0.6rem;
+    text-decoration: none;
+    transition: border-left-color 0.2s ease, background 0.2s ease;
+}
+
+.liens-article-card:hover {
+    border-left-color: var(--dark);
+    background: transparent;
+}
+
+.liens-article-meta {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--grey);
+}
+
+.liens-article-title {
+    font-size: 0.97rem;
+    font-weight: 600;
+    color: var(--color-text);
+    line-height: 1.3;
+}
+
+/* ── Social network grid ── */
+.liens-social {
+    display: flex;
+    flex-direction: column;
+}
+
+.liens-social-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+}
+
+.liens-social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 0.7rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.6rem;
+    color: var(--color-text);
+    font-size: 0.88rem;
+    font-weight: 500;
+    text-decoration: none;
+    background: transparent;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.liens-social-btn:hover {
+    background: var(--dark);
+    border-color: var(--dark);
+    color: var(--light);
+}
+
+.liens-social-btn ion-icon {
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+
+.liens-social-btn svg {
+    width: 17px;
+    height: 17px;
+    fill: currentColor;
+    flex-shrink: 0;
+}
+
+/* ── Newsletter CTA ── */
+.liens-newsletter-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.9rem 1.5rem;
+    background: var(--other-bg-color);
+    color: var(--other-color-text);
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.liens-newsletter-btn:hover {
+    opacity: 0.85;
+    color: var(--other-color-text);
+}
+
+.liens-newsletter-btn ion-icon {
+    font-size: 1.15rem;
+}
+
+/* ── Footer link ── */
+.liens-footer-link {
+    text-align: center;
+    margin-top: 0.5rem;
+    font-size: 0.78rem;
+}
+
+.liens-footer-link a {
+    color: var(--grey);
+    text-decoration: none;
+    font-weight: 400;
+}
+
+.liens-footer-link a:hover {
+    color: var(--color-text);
+}
+
+/* ── Responsive: single-column social grid on very small screens ── */
+@media (max-width: 360px) {
+    .liens-social-grid {
+        grid-template-columns: 1fr;
+    }
+}

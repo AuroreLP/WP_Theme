@@ -129,6 +129,19 @@ function turningpages_enqueue_styles() {
         }
     }
 
+    // Links/bio page (Linktree-style)
+    if ( is_page_template( 'page-liens.php' ) ) {
+        $path = 'assets/css/pages/liens.css';
+        if ( file_exists( get_template_directory() . '/' . $path ) ) {
+            wp_enqueue_style(
+                'liens-style',
+                get_template_directory_uri() . '/' . $path,
+                array( 'turningpages-style' ),
+                tp_asset_version( $path )
+            );
+        }
+    }
+
     // Search results page
     if ( is_search() ) {
         $path = 'assets/css/pages/search.css';

@@ -395,6 +395,11 @@ footer .social a:hover {
     color: var(--other-color-text);
 }
 
+footer .social .social-link-svg svg {
+    width: 20px;
+    height: 20px;
+}
+
 @media (max-width: 800px) {
     footer {
         display: flex;
