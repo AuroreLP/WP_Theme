@@ -208,12 +208,13 @@
    SINGLES - Share buttons (sticky, right column)
    ========================================== */
 
-/* Stretch the right column so sticky has room to work */
+/* The entire right column sticks as the user reads —
+   cover image + sidebar info + share buttons stay visible together */
 .chronique-content .chronique-image,
 .article-content .chronique-image {
-    align-self: stretch;
-    display: flex;
-    flex-direction: column;
+    position: sticky;
+    top: 2rem;
+    align-self: flex-start;
 }
 
 .share-buttons {
@@ -222,8 +223,6 @@
     flex-direction: column;
     align-items: center;
     gap: 0.6rem;
-    position: sticky;
-    top: 2rem;
 }
 
 .share-label {
@@ -267,16 +266,19 @@
     fill: currentColor;
 }
 
-/* On mobile: horizontal row above the cover image */
+/* On mobile: column de droite non sticky, boutons en ligne */
 @media (max-width: 768px) {
-    .share-buttons {
+    .chronique-content .chronique-image,
+    .article-content .chronique-image {
         position: static;
+    }
+
+    .share-buttons {
         flex-direction: row;
         justify-content: center;
         flex-wrap: wrap;
-        margin-top: 0;
-        margin-bottom: 1rem;
-        order: -1;
+        margin-top: 1rem;
+        margin-bottom: 0;
     }
 }
 
