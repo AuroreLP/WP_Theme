@@ -98,6 +98,42 @@
     line-height: 1.5;
 }
 
+/* Listes dans le contenu rédactionnel (articles, chroniques, portraits).
+   Le reset global supprime list-style et padding sur * — on les restaure
+   ici uniquement dans .chronique-text pour ne pas affecter nav/tags/cartes. */
+.chronique-text ul,
+.chronique-text ol,
+.chronique-text .wp-block-list {
+    padding-left: 1.5em;
+    margin-bottom: 1.5em;
+    font-size: inherit;
+    line-height: 1.5;
+}
+
+.chronique-text ul,
+.chronique-text .wp-block-list:not(ol) {
+    list-style: disc;
+}
+
+.chronique-text ol {
+    list-style: decimal;
+}
+
+.chronique-text li {
+    margin-bottom: 0.4em;
+    font-size: inherit;
+}
+
+.chronique-text li > ul,
+.chronique-text li > ol {
+    margin-top: 0.4em;
+    margin-bottom: 0;
+}
+
+.chronique-text li > ul {
+    list-style: circle;
+}
+
 /* Image de couverture */
 .chronique-content .chronique-image {
     flex: 1;
