@@ -110,13 +110,15 @@
     line-height: 1.5;
 }
 
-.chronique-text ul,
-.chronique-text .wp-block-list:not(ol) {
-    list-style: disc;
+/* Cibler les li directement : le reset global * { list-style: none }
+   s'applique en direct sur li et bat la valeur héritée de ul/ol. */
+.chronique-text ul > li,
+.chronique-text .wp-block-list:not(ol) > li {
+    list-style: disc !important;
 }
 
-.chronique-text ol {
-    list-style: decimal;
+.chronique-text ol > li {
+    list-style: decimal !important;
 }
 
 .chronique-text li {
@@ -130,8 +132,8 @@
     margin-bottom: 0;
 }
 
-.chronique-text li > ul {
-    list-style: circle;
+.chronique-text li > ul > li {
+    list-style: circle !important;
 }
 
 /* Image de couverture */
