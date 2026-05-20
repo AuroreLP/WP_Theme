@@ -39,3 +39,6 @@ require_once get_template_directory() . '/inc/functions/acf-config.php';
 
 // ── Helpers: formatting utilities used across templates ──
 require_once get_template_directory() . '/inc/helpers/formatting.php';
+
+// ── SEO: Rank Math OpenGraph fixes ──
+require_once get_template_directory() . '/inc/functions/seo-helpers.php';
