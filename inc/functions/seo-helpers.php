@@ -16,7 +16,9 @@ function tp_inject_og_image( $image_obj ) {
         return;
     }
 
-    $post_id = get_the_ID();
+    // get_the_ID() ne fonctionne pas hors boucle (contexte wp_head).
+    // get_queried_object_id() est ce que Rank Math utilise lui-même.
+    $post_id = get_queried_object_id();
 
     // get_field() gère tous les formats de retour ACF (ID, array, URL).
     $image = function_exists( 'get_field' ) ? get_field( 'image_partage_social', $post_id ) : null;
