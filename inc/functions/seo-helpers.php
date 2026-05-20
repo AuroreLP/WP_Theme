@@ -27,11 +27,25 @@ function tp_replace_og_image( $url ) {
         return $url;
     }
 
+    // Format ID (entier ou chaîne numérique)
     if ( is_numeric( $raw ) && (int) $raw > 0 ) {
         $acf_url = wp_get_attachment_image_url( (int) $raw, 'full' );
         return $acf_url ?: $url;
     }
 
+    // Format tableau (ACF stocke parfois l'image comme array sérialisé)
+    if ( is_array( $raw ) ) {
+        if ( ! empty( $raw['ID'] ) ) {
+            $acf_url = wp_get_attachment_image_url( (int) $raw['ID'], 'full' );
+            return $acf_url ?: $url;
+        }
+        if ( ! empty( $raw['url'] ) && filter_var( $raw['url'], FILTER_VALIDATE_URL ) ) {
+            return $raw['url'];
+        }
+        return $url;
+    }
+
+    // Format URL directe
     if ( is_string( $raw ) && filter_var( $raw, FILTER_VALIDATE_URL ) ) {
         return $raw;
     }
