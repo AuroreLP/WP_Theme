@@ -2,11 +2,6 @@
 /**
  * SEO Helpers — Connexion du champ ACF "image_partage_social" à Rank Math
  *
- * Le champ ACF "image_partage_social" (image paysage pour les réseaux sociaux)
- * existe pour les chroniques, articles et portraits, mais Rank Math free ne le
- * lit pas nativement. Ce hook l'injecte comme og:image avant que Rank Math ne
- * replie vers l'image à la une (portrait).
- *
  * @package turningpages
  */
 
@@ -16,22 +11,29 @@ function tp_inject_og_image( $image_obj ) {
         return;
     }
 
-    // get_the_ID() ne fonctionne pas hors boucle (contexte wp_head).
-    // get_queried_object_id() est ce que Rank Math utilise lui-même.
     $post_id = get_queried_object_id();
 
-    // get_field() gère tous les formats de retour ACF (ID, array, URL).
-    $image = function_exists( 'get_field' ) ? get_field( 'image_partage_social', $post_id ) : null;
-
-    if ( ! $image ) {
+    if ( ! $post_id ) {
         return;
     }
 
-    if ( is_array( $image ) && isset( $image['ID'] ) ) {
-        $image_obj->add_image_by_id( (int) $image['ID'] );
-    } elseif ( is_numeric( $image ) && (int) $image > 0 ) {
-        $image_obj->add_image_by_id( (int) $image );
-    } elseif ( is_string( $image ) && filter_var( $image, FILTER_VALIDATE_URL ) ) {
-        $image_obj->add_image_by_url( $image );
+    // Lecture directe du post_meta (bypass ACF) pour fiabilité maximale.
+    // ACF stocke les images sous la clé = nom du champ dans wp_postmeta.
+    $raw = get_post_meta( $post_id, 'image_partage_social', true );
+
+    // Log temporaire pour diagnostic — à retirer après confirmation.
+    error_log( '[tp_og] post_id=' . $post_id . ' raw=' . print_r( $raw, true ) );
+
+    if ( ! $raw ) {
+        return;
+    }
+
+    // Le format de retour ACF peut être : ID entier, tableau avec 'ID', ou URL.
+    if ( is_numeric( $raw ) && (int) $raw > 0 ) {
+        $image_obj->add_image_by_id( (int) $raw );
+    } elseif ( is_array( $raw ) && ! empty( $raw['ID'] ) ) {
+        $image_obj->add_image_by_id( (int) $raw['ID'] );
+    } elseif ( is_string( $raw ) && filter_var( $raw, FILTER_VALIDATE_URL ) ) {
+        $image_obj->add_image_by_url( $raw );
     }
 }
