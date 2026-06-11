@@ -56,6 +56,10 @@ function tp_customize_register( $wp_customize ) {
             'label' => 'URL Threads',
         ),
         array(
+            'mod'   => 'substack_url',
+            'label' => 'URL Substack',
+        ),
+        array(
             'mod'   => 'newsletter_url',
             'label' => 'URL Newsletter (page liens)',
         ),
