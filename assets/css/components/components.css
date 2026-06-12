@@ -362,6 +362,15 @@ blockquote p {
     margin-bottom: 2rem;
 }
 
+.substack-feed__intro {
+    max-width: 860px;
+    margin: 0 auto 2rem;
+    text-align: center;
+    font-size: clamp(0.95rem, 1vw, 1.15rem);
+    line-height: 1.6;
+    color: var(--grey);
+}
+
 /* Grille des 3 cartes — alignée sur .posts-grid */
 .substack-feed__list {
     display: grid;

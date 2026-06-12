@@ -33,12 +33,11 @@ if ( empty( $items ) ) {
 <section class="substack-feed" aria-label="Dernières lettres Substack">
 
     <h2 class="substack-feed__heading">Ce que j'écris ailleurs</h2>
-
     <p class="substack-feed__intro">
-        Substack, c'est un peu le réseau social des gens qui aiment lire et écrire, 
-        sans algorithme qui dicte quoi publier ni comment. Loin des injonctions 
-        d'Instagram, j'y explore une facette plus personnelle, sans artifice : 
-        des réflexions en cours, des pensées plus personnelles, des textes 
+        Substack, c'est un peu le réseau social des gens qui aiment lire et écrire,
+        sans algorithme qui dicte quoi publier ni comment. Loin des injonctions
+        d'Instagram, j'y explore une facette plus personnelle, sans artifice :
+        des réflexions en cours, des pensées plus personnelles, des textes
         qui ne rentrent pas dans le cadre du blog.
     </p>
 
@@ -48,8 +47,26 @@ if ( empty( $items ) ) {
             $link        = esc_url( $item->get_permalink() );
             $date        = $item->get_date( 'd/m/Y' );
             $description = wp_trim_words( wp_strip_all_tags( $item->get_description() ), 20, '…' );
-            $thumbnail   = $item->get_thumbnail();
-            $img_url     = ! empty( $thumbnail['url'] ) ? esc_url( $thumbnail['url'] ) : '';
+
+            // Method 1: media:thumbnail (RSS standard)
+            $thumbnail = $item->get_thumbnail();
+            $img_url   = ! empty( $thumbnail['url'] ) ? esc_url( $thumbnail['url'] ) : '';
+
+            // Method 2: enclosure (alternative RSS format)
+            if ( ! $img_url ) {
+                $enclosure = $item->get_enclosure();
+                if ( $enclosure && $enclosure->get_link() ) {
+                    $img_url = esc_url( $enclosure->get_link() );
+                }
+            }
+
+            // Method 3: first <img> found in post HTML content (Substack fallback)
+            if ( ! $img_url ) {
+                $content = $item->get_content();
+                if ( preg_match( '/<img[^>]+src=["\']([^"\']+)["\']/', $content, $matches ) ) {
+                    $img_url = esc_url( $matches[1] );
+                }
+            }
         ?>
         <li class="substack-feed__item">
             <a href="<?php echo $link; ?>"
