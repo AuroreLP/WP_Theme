@@ -33,6 +33,7 @@ if ( empty( $items ) ) {
 <section class="substack-feed" aria-label="Dernières lettres Substack">
 
     <h2 class="substack-feed__heading">Ce que j'écris ailleurs</h2>
+    <h3 class="substack-feed__subheading">Substack, un nouveau réseau social?</h3>
     <p class="substack-feed__intro">
         Substack, c'est un peu le réseau social des gens qui aiment lire et écrire,
         sans algorithme qui dicte quoi publier ni comment. Loin des injonctions

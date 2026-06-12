@@ -357,9 +357,8 @@ blockquote p {
 /* Sous-titre / accroche */
 .substack-feed__subheading {
     text-align: center;
-    font-size: clamp(0.9rem, 1vw, 1.1rem);
-    color: var(--grey);
-    margin-bottom: 2rem;
+    font-size: clamp(1rem, 1vw, 1.4rem);
+    margin-bottom: 1rem;
 }
 
 .substack-feed__intro {
@@ -368,7 +367,6 @@ blockquote p {
     text-align: center;
     font-size: clamp(0.95rem, 1vw, 1.15rem);
     line-height: 1.6;
-    color: var(--grey);
 }
 
 /* Grille des 3 cartes — alignée sur .posts-grid */
