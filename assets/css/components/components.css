@@ -333,3 +333,186 @@ blockquote p {
         grid-gap: 1rem;
     }
 }
+
+/* ==========================================
+   SUBSTACK FEED — Bloc CTA
+   ========================================== */
+
+.substack-feed {
+    border-top: 1px solid var(--border-color);
+    margin-top: 3rem;
+    padding-top: 2rem;
+}
+
+/* Titre de section */
+.substack-feed__heading {
+    text-align: center;
+    margin-bottom: 0.3rem;
+    font-size: clamp(1.8rem, 1.5vw, 2.2rem);
+    font-family: "Cardo", serif;
+    font-weight: 400;
+    color: var(--color-text);
+}
+
+/* Sous-titre / accroche */
+.substack-feed__subheading {
+    text-align: center;
+    font-size: clamp(0.9rem, 1vw, 1.1rem);
+    color: var(--grey);
+    margin-bottom: 2rem;
+}
+
+/* Grille des 3 cartes — alignée sur .posts-grid */
+.substack-feed__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    justify-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto 2rem;
+}
+
+/* Carte individuelle — cohérente avec .post-box */
+.substack-feed__item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 1rem;
+    overflow: hidden;
+    width: 100%;
+    max-width: 300px;
+    min-height: 280px;
+    box-shadow: 0 4px 12px var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.substack-feed__item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px var(--border-color);
+}
+
+/* Lien qui enveloppe toute la carte */
+.substack-feed__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-decoration: none;
+    color: var(--color-text);
+}
+
+/* Image */
+.substack-feed__img-wrap {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background-color: var(--border-color);
+    flex-shrink: 0;
+}
+
+.substack-feed__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.substack-feed__item:hover .substack-feed__img {
+    transform: scale(1.05);
+}
+
+/* Métadonnées texte */
+.substack-feed__meta {
+    padding: 0.8rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+/* Date */
+.substack-feed__date {
+    font-size: 0.8rem;
+    color: var(--grey);
+    margin-bottom: 0.3rem;
+    text-align: left;
+    line-height: 1;
+}
+
+/* Titre — Cardo comme tes h3 */
+.substack-feed__title {
+    font-family: "Cardo", serif;
+    font-size: clamp(1.2rem, 1.3vw, 1.6rem);
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Extrait */
+.substack-feed__desc {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: var(--grey);
+    text-align: left;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ==========================================
+   CTA — Bouton vers le profil Substack
+   ========================================== */
+
+.substack-feed__cta {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.substack-feed__cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.4rem;
+    border-radius: 1rem;
+    border: 2px solid var(--border-color);
+    background: transparent;
+    color: var(--color-text);
+    font-weight: 600;
+    font-size: clamp(0.9rem, 1vw, 1.1rem);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.substack-feed__cta-btn svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.substack-feed__cta-btn:hover {
+    background-color: var(--dark);
+    color: var(--other-color-text);
+    border-color: var(--dark);
+}
+
+/* ==========================================
+   Responsive
+   ========================================== */
+
+@media (max-width: 768px) {
+    .substack-feed__list {
+        grid-template-columns: 1fr;
+        max-width: 340px;
+        margin-inline: auto;
+    }
+
+    .substack-feed__item {
+        max-width: 100%;
+    }
+}

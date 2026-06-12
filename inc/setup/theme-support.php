@@ -120,3 +120,11 @@ add_filter( 'use_block_editor_for_post_type', function ( $use_block_editor, $pos
     }
     return $use_block_editor;
 }, 10, 2 );
+
+// Cache le flux RSS Substack pendant 6 heures
+add_filter( 'wp_feed_cache_transient_lifetime', function( $seconds, $url ) {
+    if ( str_contains( $url, 'substack.com' ) ) {
+        return 6 * HOUR_IN_SECONDS;
+    }
+    return $seconds;
+}, 10, 2 );
