@@ -25,6 +25,7 @@ get_header();
             <?php echo do_shortcode( '[contact-form-7 id="5501d4c" title="Formulaire de contact 1"]' ); ?>
         </div>
     </section>
+    <?php get_template_part( 'inc/template-parts/components/substack-feed' ); ?>
 </main>
 
 <?php
