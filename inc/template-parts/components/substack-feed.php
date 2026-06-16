@@ -24,7 +24,77 @@ if ( is_wp_error( $feed ) ) {
     return;
 }
 
-$items = $feed->get_items( 0, 3 );
+if ( ! function_exists( 'tp_normalize_title' ) ) {
+    /**
+     * Normalize a title for loose, accent/case/whitespace-insensitive comparison.
+     *
+     * @param string $title Title to normalize.
+     * @return string
+     */
+    function tp_normalize_title( $title ) {
+        $title = remove_accents( wp_strip_all_tags( $title ) );
+        $title = strtolower( trim( $title ) );
+        return preg_replace( '/\s+/', ' ', $title );
+    }
+}
+
+if ( ! function_exists( 'tp_get_blog_post_titles' ) ) {
+    /**
+     * Normalized titles of all published blog posts (post + chroniques).
+     *
+     * Our own articles get re-published on Substack via rss.app, so they also
+     * show up in Substack's RSS feed alongside genuinely original Substack
+     * content. We use this list to filter those reposts out of the widget,
+     * since they're already visible elsewhere on the site.
+     *
+     * Cached for an hour: this runs on every page that displays the widget.
+     *
+     * @return string[]
+     */
+    function tp_get_blog_post_titles() {
+        $cached = get_transient( 'tp_blog_post_titles' );
+        if ( false !== $cached ) {
+            return $cached;
+        }
+
+        global $wpdb;
+        $raw_titles = $wpdb->get_col(
+            $wpdb->prepare(
+                "SELECT post_title FROM {$wpdb->posts} WHERE post_type IN (%s, %s) AND post_status = 'publish'",
+                'post',
+                'chroniques'
+            )
+        );
+
+        $titles = array_map( 'tp_normalize_title', $raw_titles );
+
+        set_transient( 'tp_blog_post_titles', $titles, HOUR_IN_SECONDS );
+
+        return $titles;
+    }
+}
+
+// Fetch more than we need: items matching a blog post title (reposted via
+// rss.app) get filtered out below, so we need extra candidates to still end
+// up with 3 genuinely original Substack items.
+$candidates = $feed->get_items( 0, 15 );
+if ( empty( $candidates ) ) {
+    return;
+}
+
+$blog_titles = tp_get_blog_post_titles();
+
+$items = array();
+foreach ( $candidates as $candidate ) {
+    if ( in_array( tp_normalize_title( $candidate->get_title() ), $blog_titles, true ) ) {
+        continue; // Repost of one of our own articles — already shown elsewhere on the site.
+    }
+    $items[] = $candidate;
+    if ( count( $items ) >= 3 ) {
+        break;
+    }
+}
+
 if ( empty( $items ) ) {
     return;
 }
