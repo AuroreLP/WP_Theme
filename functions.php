@@ -42,3 +42,6 @@ require_once get_template_directory() . '/inc/helpers/formatting.php';
 
 // ── SEO: Rank Math OpenGraph fixes ──
 require_once get_template_directory() . '/inc/functions/seo-helpers.php';
+
+// ── RSS feed: inject featured image for Substack/rss.app import ──
+require_once get_template_directory() . '/inc/functions/rss-feed.php';
