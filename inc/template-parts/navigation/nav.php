@@ -31,13 +31,13 @@
         <li>
             <a href="<?php echo esc_url( home_url( '/liste-chroniques/' ) ); ?>"
                class="filter-item <?php echo is_page( 'liste-chroniques' ) ? 'is-active' : ''; ?>">
-                Chroniques
+                De l'imaginaire
             </a>
         </li>
         <li>
             <a href="<?php echo esc_url( home_url( '/journal/' ) ); ?>"
                class="filter-item <?php echo is_page( 'journal' ) ? 'is-active' : ''; ?>">
-                Journal
+                Au réel
             </a>
         </li>
         <!-- <li>
