@@ -102,16 +102,16 @@
 .article-title a {
     color: var(--color-text);
     font-weight: 600;
-    font-size: clamp(1.4rem, 1.6vw, 1.8rem);
-    display: -webkit-box;  
-    line-clamp: 2;
-    -webkit-line-clamp: 2; 
+    font-size: clamp(1.2rem, 1.4vw, 1.6rem);
+    display: -webkit-box;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
     line-height: 1.2;
     text-decoration: none;
     overflow: hidden;
     text-overflow: ellipsis;
     word-break: break-word;
-    max-height: 2.4em;
+    max-height: 3.6em;
 }
 
 .article-date {
