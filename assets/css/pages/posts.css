@@ -23,6 +23,12 @@
     border-bottom: 2px solid var(--border-color);
 }
 
+.heading-subtitle {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    color: var(--color-text);
+}
+
 @media (max-width: 768px) {
     .container {
         padding: 0;

@@ -20,6 +20,10 @@ get_header(); ?>
     <?php if ( get_field( 'parentheses_title_section' ) ) : ?>
         <div class="heading">
             <h1><?php echo wp_kses_post( get_field( 'parentheses_title_section' ) ); ?></h1>
+            <?php $description = get_field( 'journal_description' ); ?>
+            <?php if ( ! empty( $description ) ) : ?>
+                <p class="heading-subtitle"><?php echo wp_kses_post( $description ); ?></p>
+            <?php endif; ?>
         </div>
     <?php endif; ?>
 
