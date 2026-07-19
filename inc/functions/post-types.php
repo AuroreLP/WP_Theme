@@ -35,9 +35,6 @@
  * - has_archive => false: Chroniques are listed via a custom page template
  *   (page-chroniques.php) with filters, not WP's default archive.
  * - show_in_rest => true: Required for Gutenberg editor support.
- * - template: Pre-fills new chroniques with Résumé/Impressions headings
- *   to guide the writing structure. template_lock is false so the
- *   structure can be modified per post if needed.
  */
 add_action( 'init', 'tp_register_chroniques_cpt' );
 function tp_register_chroniques_cpt() {
@@ -61,25 +58,6 @@ function tp_register_chroniques_cpt() {
         'menu_icon'     => 'dashicons-edit-page',
         'show_in_rest'  => true,
         'supports'      => array( 'title', 'editor', 'thumbnail', 'excerpt', 'comments' ),
-
-        // Gutenberg block template — pre-fills the editor with a structure
-        'template' => array(
-            array( 'core/heading', array(
-                'level'   => 2,
-                'content' => 'Résumé',
-            ) ),
-            array( 'core/paragraph', array(
-                'placeholder' => 'Écris ici ton résumé...',
-            ) ),
-            array( 'core/heading', array(
-                'level'   => 2,
-                'content' => 'Impressions',
-            ) ),
-            array( 'core/paragraph', array(
-                'placeholder' => 'Écris ici tes impressions sur le livre...',
-            ) ),
-        ),
-        'template_lock' => false,
     ) );
 }
 
