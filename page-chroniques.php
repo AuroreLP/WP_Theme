@@ -43,17 +43,8 @@ get_header();
                 <select id="filter-media">
                     <option value="all">Par type de média</option>
                     <?php
-                    $type_media = get_terms( array(
-                        'taxonomy'   => 'type_media',
-                        'parent'     => 0,
-                        'hide_empty' => false,
-                        'orderby'    => 'name',
-                        'order'      => 'ASC',
-                    ) );
-                    if ( ! empty( $type_media ) && ! is_wp_error( $type_media ) ) {
-                        foreach ( $type_media as $media ) {
-                            echo '<option value="' . esc_attr( $media->slug ) . '">' . esc_html( $media->name ) . '</option>';
-                        }
+                    foreach ( tp_get_type_media_terms( true ) as $media ) {
+                        echo '<option value="' . esc_attr( $media->slug ) . '">' . esc_html( $media->name ) . '</option>';
                     }
                     ?>
                 </select>
@@ -124,11 +115,20 @@ get_header();
          * filters need every post in the DOM to show/hide them.
          * Pagination is handled by filter-chroniques.js (8 per page).
          */
+        $fiction_terms = wp_list_pluck( tp_get_type_media_terms( true ), 'term_id' );
+
         $args = array(
             'post_type'      => 'chroniques',
             'posts_per_page' => -1,
             'orderby'        => 'date',
             'order'          => 'DESC',
+            'tax_query'      => array(
+                array(
+                    'taxonomy' => 'type_media',
+                    'field'    => 'term_id',
+                    'terms'    => ! empty( $fiction_terms ) ? $fiction_terms : array( 0 ),
+                ),
+            ),
         );
 
         $query = new WP_Query( $args );

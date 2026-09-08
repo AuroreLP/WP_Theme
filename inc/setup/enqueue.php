@@ -291,7 +291,7 @@ function turningpages_enqueue_scripts() {
      * Other archive pages get a simpler pagination-only script.
      * elseif ensures only one loads per page.
      */
-    if ( is_page_template( 'page-chroniques.php' ) ) {
+    if ( is_page_template( 'page-chroniques.php' ) || is_page_template( 'page-journal-chroniques.php' ) ) {
         wp_enqueue_script(
             'filter-chroniques-script',
             get_template_directory_uri() . '/assets/js/modules/filter-chroniques.js',

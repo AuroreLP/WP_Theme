@@ -224,6 +224,63 @@ function tp_get_chronique_tags() {
     return $tags;
 }
 
+/**
+ * Get type_media terms filtered by the 'est_fiction' term meta.
+ *
+ * Single source of truth for both listing pages (page-chroniques.php /
+ * page-journal-chroniques.php) — avoids duplicating a hardcoded slug list
+ * in two templates. A term with no est_fiction meta (never saved through
+ * the term edit screen) is treated as non-fiction, same as an explicitly
+ * unchecked box.
+ *
+ * @param bool $fiction  true = fiction terms, false = non-fiction terms.
+ * @return WP_Term[]  Possibly empty array.
+ */
+function tp_get_type_media_terms( $fiction ) {
+    $terms = get_terms( array(
+        'taxonomy'   => 'type_media',
+        'hide_empty' => false,
+    ) );
+
+    if ( empty( $terms ) || is_wp_error( $terms ) ) {
+        return array();
+    }
+
+    return array_values( array_filter( $terms, function ( $term ) use ( $fiction ) {
+        $is_fiction = get_term_meta( $term->term_id, 'est_fiction', true ) === '1';
+        return $fiction ? $is_fiction : ! $is_fiction;
+    } ) );
+}
+
+/**
+ * Whether a chronique's type_media is classified as fiction.
+ *
+ * Used by ariane.php to route the breadcrumb link to the correct
+ * listing page. Mirrors the default of tp_get_type_media_terms():
+ * no type_media assigned → treated as non-fiction.
+ *
+ * @param int|null $post_id  Defaults to current post in the loop.
+ * @return bool
+ */
+function tp_chronique_is_fiction( $post_id = null ) {
+    if ( ! $post_id ) {
+        $post_id = get_the_ID();
+    }
+
+    $terms = get_the_terms( $post_id, 'type_media' );
+    if ( ! $terms || is_wp_error( $terms ) ) {
+        return false;
+    }
+
+    foreach ( $terms as $term ) {
+        if ( get_term_meta( $term->term_id, 'est_fiction', true ) === '1' ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 
 /* =========================================================================
  * RANK MATH — Custom SEO Variable

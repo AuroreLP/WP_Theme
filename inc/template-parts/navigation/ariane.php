@@ -5,7 +5,7 @@
  * Renders a simple breadcrumb trail for single posts, chroniques,
  * and other post types. Structure varies by content type:
  *
- *   Chronique: Accueil > Chroniques > Genre Parent > Sous-genre > Title
+ *   Chronique: Accueil > Chroniques|Journal > Genre Parent > Sous-genre > Title
  *   Article:   Accueil > Catégorie > Title
  *   Artiste:   Accueil > Portraits > Title
  *   Other CPT: Accueil > CPT Archive > Title
@@ -14,9 +14,12 @@
  * (parent > child) when both are assigned, giving users a clear
  * path back to genre archives.
  *
- * NOTE: The "Chroniques" link points to the page with slug
- * 'liste-chroniques' (fetched via get_page_by_path). If this slug
- * changes, the breadcrumb link will break.
+ * NOTE: The listing link is "Chroniques" (slug 'liste-chroniques') for
+ * fiction chroniques or "Journal" (slug 'journal') for non-fiction ones,
+ * per tp_chronique_is_fiction() — this must stay in sync with which
+ * page actually lists the chronique (page-chroniques.php vs
+ * page-journal-chroniques.php). If either slug changes, the
+ * corresponding breadcrumb link will break.
  *
  * Used in: single-chroniques.php, single.php, single-artiste.php
  *
@@ -32,12 +35,19 @@
     $categories = get_the_category();
     $genres     = get_the_terms( get_the_ID(), 'genre' );
 
-    // ── Chroniques: Chroniques > Genre Parent > Sous-genre ──
+    // ── Chroniques: Chroniques/Journal > Genre Parent > Sous-genre ──
     if ( 'chroniques' === $post_type ) {
 
-        $chroniques_page = get_page_by_path( 'liste-chroniques' );
-        if ( $chroniques_page ) {
-            echo '<a href="' . esc_url( get_permalink( $chroniques_page ) ) . '">Chroniques</a> > ';
+        // Route to whichever listing page actually shows this chronique
+        // (fiction → Chroniques, non-fiction → Journal) — see
+        // tp_chronique_is_fiction() in taxonomy-helpers.php.
+        $is_fiction    = tp_chronique_is_fiction();
+        $listing_slug  = $is_fiction ? 'liste-chroniques' : 'journal';
+        $listing_label = $is_fiction ? 'Chroniques' : 'Journal';
+
+        $listing_page = get_page_by_path( $listing_slug );
+        if ( $listing_page ) {
+            echo '<a href="' . esc_url( get_permalink( $listing_page ) ) . '">' . esc_html( $listing_label ) . '</a> > ';
         }
 
         /**

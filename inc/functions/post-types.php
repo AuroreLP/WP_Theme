@@ -162,6 +162,60 @@ function tp_register_chroniques_taxonomies() {
 }
 
 
+/**
+ * Term meta "est_fiction" — Fiction / Non-fiction flag for type_media terms.
+ *
+ * Powers the routing between the Chroniques page (fiction) and the
+ * Journal page (non-fiction): see tp_get_type_media_terms() in
+ * taxonomy-helpers.php. Stored as '1' (fiction) or '0'/unset (non-fiction) —
+ * a term that has never been saved through this form defaults to
+ * non-fiction, same as an explicitly unchecked box.
+ */
+
+add_action( 'type_media_add_form_fields', 'tp_type_media_est_fiction_add_field' );
+function tp_type_media_est_fiction_add_field( $taxonomy ) {
+    wp_nonce_field( 'tp_save_type_media_est_fiction', 'tp_type_media_est_fiction_nonce' );
+    ?>
+    <div class="form-field term-group">
+        <label for="tp-est-fiction">
+            <input type="checkbox" name="tp_est_fiction" id="tp-est-fiction" value="1" />
+            Fiction
+        </label>
+        <p>Coché : ce type de média est classé comme fiction (page Chroniques). Décoché : non-fiction (page Journal).</p>
+    </div>
+    <?php
+}
+
+add_action( 'type_media_edit_form_fields', 'tp_type_media_est_fiction_edit_field' );
+function tp_type_media_est_fiction_edit_field( $term ) {
+    wp_nonce_field( 'tp_save_type_media_est_fiction', 'tp_type_media_est_fiction_nonce' );
+    $est_fiction = get_term_meta( $term->term_id, 'est_fiction', true );
+    ?>
+    <tr class="form-field">
+        <th scope="row"><label for="tp-est-fiction">Fiction</label></th>
+        <td>
+            <input type="checkbox" name="tp_est_fiction" id="tp-est-fiction" value="1" <?php checked( $est_fiction, '1' ); ?> />
+            <p class="description">Coché : ce type de média est classé comme fiction (page Chroniques). Décoché : non-fiction (page Journal).</p>
+        </td>
+    </tr>
+    <?php
+}
+
+add_action( 'created_type_media', 'tp_save_type_media_est_fiction' );
+add_action( 'edited_type_media', 'tp_save_type_media_est_fiction' );
+function tp_save_type_media_est_fiction( $term_id ) {
+    if ( ! isset( $_POST['tp_type_media_est_fiction_nonce'] ) ||
+         ! wp_verify_nonce( $_POST['tp_type_media_est_fiction_nonce'], 'tp_save_type_media_est_fiction' ) ) {
+        return;
+    }
+    if ( ! current_user_can( 'manage_categories' ) ) {
+        return;
+    }
+    $est_fiction = isset( $_POST['tp_est_fiction'] ) ? '1' : '0';
+    update_term_meta( $term_id, 'est_fiction', $est_fiction );
+}
+
+
 /* =========================================================================
  * 3. META BOX: CHRONIQUE DETAILS
  * ========================================================================= */
