@@ -35,6 +35,38 @@ get_header();
 
     <div class="container">
 
+        <?php
+        /**
+         * Chroniques loop — loads ALL published chroniques.
+         *
+         * posts_per_page = -1 is intentional here: the client-side JS
+         * filters need every post in the DOM to show/hide them.
+         * Pagination is handled by filter-chroniques.js (8 per page).
+         *
+         * Run before the filter dropdowns below so their genre/theme/
+         * nationalite lists can be scoped to $post_ids — only options that
+         * actually apply to a fiction chronique are shown.
+         */
+        $fiction_terms = wp_list_pluck( tp_get_type_media_terms( true ), 'term_id' );
+
+        $args = array(
+            'post_type'      => 'chroniques',
+            'posts_per_page' => -1,
+            'orderby'        => 'date',
+            'order'          => 'DESC',
+            'tax_query'      => array(
+                array(
+                    'taxonomy' => 'type_media',
+                    'field'    => 'term_id',
+                    'terms'    => ! empty( $fiction_terms ) ? $fiction_terms : array( 0 ),
+                ),
+            ),
+        );
+
+        $query    = new WP_Query( $args );
+        $post_ids = wp_list_pluck( $query->posts, 'ID' );
+        ?>
+
         <?php /* ── Filter dropdowns — values read by filter-chroniques.js ── */ ?>
         <div class="filters-wrapper">
             <div class="filters-container">
@@ -53,17 +85,9 @@ get_header();
                 <select id="filter-genre">
                     <option value="all">Par genre</option>
                     <?php
-                    $genres_principaux = get_terms( array(
-                        'taxonomy'   => 'genre',
-                        'parent'     => 0,
-                        'hide_empty' => false,
-                        'orderby'    => 'name',
-                        'order'      => 'ASC',
-                    ) );
-                    if ( ! empty( $genres_principaux ) && ! is_wp_error( $genres_principaux ) ) {
-                        foreach ( $genres_principaux as $genre ) {
-                            echo '<option value="' . esc_attr( $genre->slug ) . '">' . esc_html( $genre->name ) . '</option>';
-                        }
+                    $genres_principaux = tp_get_terms_for_posts( 'genre', $post_ids, array( 'parent' => 0 ) );
+                    foreach ( $genres_principaux as $genre ) {
+                        echo '<option value="' . esc_attr( $genre->slug ) . '">' . esc_html( $genre->name ) . '</option>';
                     }
                     ?>
                 </select>
@@ -72,16 +96,9 @@ get_header();
                 <select id="filter-theme">
                     <option value="all">Par thème</option>
                     <?php
-                    $themes = get_terms( array(
-                        'taxonomy'   => 'theme',
-                        'hide_empty' => true,
-                        'orderby'    => 'name',
-                        'order'      => 'ASC',
-                    ) );
-                    if ( ! empty( $themes ) && ! is_wp_error( $themes ) ) {
-                        foreach ( $themes as $theme ) {
-                            echo '<option value="' . esc_attr( $theme->slug ) . '">' . esc_html( $theme->name ) . '</option>';
-                        }
+                    $themes = tp_get_terms_for_posts( 'theme', $post_ids );
+                    foreach ( $themes as $theme ) {
+                        echo '<option value="' . esc_attr( $theme->slug ) . '">' . esc_html( $theme->name ) . '</option>';
                     }
                     ?>
                 </select>
@@ -90,49 +107,15 @@ get_header();
                 <select id="filter-nation">
                     <option value="all">Par pays</option>
                     <?php
-                    $nations = get_terms( array(
-                        'taxonomy'   => 'nationalite',
-                        'hide_empty' => true,
-                        'orderby'    => 'name',
-                        'order'      => 'ASC',
-                    ) );
-                    if ( ! empty( $nations ) && ! is_wp_error( $nations ) ) {
-                        foreach ( $nations as $nation ) {
-                            echo '<option value="' . esc_attr( $nation->slug ) . '">' . esc_html( $nation->name ) . '</option>';
-                        }
+                    $nations = tp_get_terms_for_posts( 'nationalite', $post_ids );
+                    foreach ( $nations as $nation ) {
+                        echo '<option value="' . esc_attr( $nation->slug ) . '">' . esc_html( $nation->name ) . '</option>';
                     }
                     ?>
                 </select>
 
             </div>
         </div>
-
-        <?php
-        /**
-         * Chroniques loop — loads ALL published chroniques.
-         *
-         * posts_per_page = -1 is intentional here: the client-side JS
-         * filters need every post in the DOM to show/hide them.
-         * Pagination is handled by filter-chroniques.js (8 per page).
-         */
-        $fiction_terms = wp_list_pluck( tp_get_type_media_terms( true ), 'term_id' );
-
-        $args = array(
-            'post_type'      => 'chroniques',
-            'posts_per_page' => -1,
-            'orderby'        => 'date',
-            'order'          => 'DESC',
-            'tax_query'      => array(
-                array(
-                    'taxonomy' => 'type_media',
-                    'field'    => 'term_id',
-                    'terms'    => ! empty( $fiction_terms ) ? $fiction_terms : array( 0 ),
-                ),
-            ),
-        );
-
-        $query = new WP_Query( $args );
-        ?>
 
         <div class="posts-grid">
             <?php if ( $query->have_posts() ) : ?>

@@ -253,6 +253,45 @@ function tp_get_type_media_terms( $fiction ) {
 }
 
 /**
+ * Get terms of a taxonomy that are actually attached to a given set of posts.
+ *
+ * Used to scope filter dropdowns (genre/theme/nationalite) to the posts of
+ * the current listing page (fiction or non-fiction), instead of pulling
+ * every term that exists in the taxonomy regardless of whether it's used
+ * by any of the displayed chroniques.
+ *
+ * hide_empty is forced to false here: when object_ids is set, get_terms()
+ * already restricts the result to terms attached to those specific posts,
+ * so "empty" (unused) terms are excluded by construction. Adding
+ * hide_empty => true on top would apply WordPress's *global* term count
+ * instead, which can wrongly exclude a term that IS used by one of the
+ * given posts but happens to be attached to unpublished/other posts only
+ * in a way that skews that global count — redundant at best, wrong at worst.
+ *
+ * @param string $taxonomy    Taxonomy slug (e.g. 'genre', 'theme', 'nationalite').
+ * @param int[]  $post_ids    Post IDs to scope the terms to.
+ * @param array  $extra_args  Additional get_terms() args (e.g. 'parent' => 0).
+ * @return WP_Term[]  Possibly empty array.
+ */
+function tp_get_terms_for_posts( $taxonomy, $post_ids, $extra_args = array() ) {
+    if ( empty( $post_ids ) ) {
+        return array();
+    }
+
+    $args = array_merge( array(
+        'taxonomy'   => $taxonomy,
+        'object_ids' => $post_ids,
+        'hide_empty' => false,
+        'orderby'    => 'name',
+        'order'      => 'ASC',
+    ), $extra_args );
+
+    $terms = get_terms( $args );
+
+    return ( ! is_wp_error( $terms ) ) ? $terms : array();
+}
+
+/**
  * Whether a chronique's type_media is classified as fiction.
  *
  * Used by ariane.php to route the breadcrumb link to the correct
