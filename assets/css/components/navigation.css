@@ -458,7 +458,8 @@ nav:has(a:hover) a:not(:hover) {
     flex-wrap: wrap;
 }
 
-.filters-container select {
+.filters-container select,
+.filters-container .filter-combobox-trigger {
     padding: 0.5rem 2.5rem 0.5rem 1rem;
     font-size: 1rem;
     border: 2px solid var(--border-color);
@@ -474,19 +475,101 @@ nav:has(a:hover) a:not(:hover) {
     transition: all 0.3s ease;
 }
 
+/* Le trigger est un <button>, pas un <select> : ces resets lui font perdre
+   son style de bouton natif pour se fondre avec les autres dropdowns. */
+.filters-container .filter-combobox-trigger {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background-color: transparent;
+    color: inherit;
+    font-family: inherit;
+}
+
 /* Quand une option autre que "all" est sélectionnée */
-.filters-container select.is-active {
+.filters-container select.is-active,
+.filters-container .filter-combobox-trigger.is-active {
     color: var(--dark);
 }
 
-.filters-container select:hover {
+.filters-container select:hover,
+.filters-container .filter-combobox-trigger:hover {
     border-color: var(--hover-bg);
 }
 
-.filters-container select:focus {
+.filters-container select:focus,
+.filters-container .filter-combobox-trigger:focus {
     outline: none;
     border-color: var(--hover-bg);
     box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+}
+
+/* ── Combobox "recherche + liste" (surcouche JS des selects genre/theme/nation) ── */
+
+.filter-combobox {
+    position: relative;
+    display: inline-block;
+}
+
+.filter-combobox.is-open .filter-combobox-trigger {
+    outline: none;
+    border-color: var(--hover-bg);
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+}
+
+.filter-combobox-panel {
+    position: absolute;
+    top: calc(100% + 0.4rem);
+    left: 0;
+    z-index: 20;
+    width: max(100%, 220px);
+    background-color: var(--bg-color);
+    border: 2px solid var(--border-color);
+    border-radius: 5px;
+    box-shadow: 0 4px 14px hsl(355deg 25% 15% / 10%);
+    overflow: hidden;
+}
+
+.filter-combobox-search {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--color-text);
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid var(--border-color);
+    outline: none;
+}
+
+.filter-combobox-list {
+    max-height: 240px;
+    overflow-y: auto;
+}
+
+.filter-combobox-option {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    text-align: left;
+}
+
+/* "Tous les X" — séparé des vraies options, toujours en tête de liste */
+.filter-combobox-option--reset {
+    border-bottom: 2px solid var(--border-color);
+    margin-bottom: 0.25rem;
+}
+
+.filter-combobox-option:hover,
+.filter-combobox-option.is-highlighted {
+    background-color: var(--hover-bg);
+    color: var(--bg-color);
+}
+
+.filter-combobox-empty {
+    padding: 0.5rem 1rem;
+    color: var(--grey);
+    font-style: italic;
 }
 
 
@@ -496,7 +579,8 @@ nav:has(a:hover) a:not(:hover) {
         gap: 0.5rem;
     }
 
-    .filters-container select {
+    .filters-container select,
+    .filter-combobox {
         width: 100%;
     }
 }

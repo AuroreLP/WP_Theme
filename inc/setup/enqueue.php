@@ -299,6 +299,21 @@ function turningpages_enqueue_scripts() {
             tp_asset_version( 'assets/js/modules/filter-chroniques.js' ),
             true
         );
+
+        /**
+         * Search-to-filter combobox overlay for #filter-genre / #filter-theme /
+         * #filter-nation (see the file header for why this doesn't touch
+         * filter-chroniques.js). Depends on it purely to guarantee load
+         * order — both scripts bind their own DOMContentLoaded listener
+         * and don't call into each other directly.
+         */
+        wp_enqueue_script(
+            'filter-search-combobox-script',
+            get_template_directory_uri() . '/assets/js/modules/filter-search-combobox.js',
+            array( 'filter-chroniques-script' ),
+            tp_asset_version( 'assets/js/modules/filter-search-combobox.js' ),
+            true
+        );
     } elseif ( is_page_template( 'page-articles.php' ) ) {
         wp_enqueue_script(
             'filter-articles-script',
