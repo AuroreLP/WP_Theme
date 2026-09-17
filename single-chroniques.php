@@ -65,22 +65,34 @@ get_header();
                 ?>
 
                 <?php
-                /**
-                 * Media-specific sidebar.
-                 *
-                 * sidebar.php acts as a router: it reads the 'type_media'
-                 * taxonomy and loads the matching sidebar template.
-                 * Direct file_exists check here provides an extra safety
-                 * net before delegating to the router.
-                 */
+                // Chronique sidebar — sélection du gabarit selon le type de média
+                // -----------------------------------------------------------------
+                // Correspondance slug du terme type_media → fichier sidebar-{...}.php.
+                // Plusieurs slugs peuvent pointer vers le même fichier quand les champs
+                // à afficher sont identiques (ex: bd/essai/biographie/théâtre réutilisent
+                // les champs d'un roman classique). Un slug absent de ce tableau tombe
+                // sur 'default' plutôt que de risquer un mismatch silencieux avec le
+                // système de fichiers.
+                $sidebar_map = array(
+                    'roman'        => 'livre',
+                    'bd'           => 'livre',
+                    'essai'        => 'livre',
+                    'biographie'   => 'livre',
+                    'theatre'      => 'livre',
+                    'documentaire' => 'film',
+                    'film'         => 'film',
+                    'serie'        => 'serie',
+                    'podcast'      => 'podcast',
+                    'emission'     => 'emission',
+                    'artiste'      => 'artiste',
+                );
+
                 $type_media      = get_the_terms( get_the_ID(), 'type_media' );
                 $type_media_slug = ( $type_media && ! is_wp_error( $type_media ) ) ? $type_media[0]->slug : '';
 
-                if ( $type_media_slug && file_exists( get_template_directory() . "/inc/template-parts/chronique/sidebar-{$type_media_slug}.php" ) ) {
-                    get_template_part( 'inc/template-parts/chronique/sidebar', $type_media_slug );
-                } else {
-                    get_template_part( 'inc/template-parts/chronique/sidebar', 'default' );
-                }
+                $sidebar_slug = isset( $sidebar_map[ $type_media_slug ] ) ? $sidebar_map[ $type_media_slug ] : 'default';
+
+                get_template_part( 'inc/template-parts/chronique/sidebar', $sidebar_slug );
                 ?>
                 <?php get_template_part( 'inc/template-parts/components/share-buttons' ); ?>
             </div>
