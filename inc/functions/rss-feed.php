@@ -6,12 +6,12 @@
  * no <enclosure>, no <media:content>, and the image isn't part of the
  * post content HTML unless the author placed it inline in the editor.
  *
- * This matters here because the combined articles + chroniques feed is
- * imported into Substack via rss.app, and both only pick up images that
- * are literally present as <img> tags in the feed item's content. Without
+ * This matters because any external RSS reader or aggregator consuming
+ * the combined articles + chroniques feed only picks up images that are
+ * literally present as <img> tags in the feed item's content. Without
  * this filter, only posts where the image happens to also be inline in
- * the body show up with a picture on Substack — everything relying on
- * the "featured image" field is silently dropped.
+ * the body show up with a picture — everything relying on the "featured
+ * image" field is silently dropped.
  *
  * Fix: prepend the featured image (as a real <img> tag) to the feed
  * content for both 'post' and 'chroniques', so every item that has a

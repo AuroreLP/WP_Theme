@@ -135,7 +135,6 @@ get_header();
         </nav>
 
     </div>
-    <?php get_template_part( 'inc/template-parts/components/substack-feed' ); ?>
 </main>
 
 <?php get_footer(); ?>
